@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#0a0a0b;color:#f1e9dd;font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  ::selection{background:#f59e0b;color:#0a0a0b}
+  a{color:inherit;text-decoration:none}
+  input,textarea,button{font-family:inherit}
+  @keyframes grainShift{0%{transform:translate(0,0)}10%{transform:translate(-4%,-4%)}20%{transform:translate(-8%,3%)}30%{transform:translate(3%,-9%)}40%{transform:translate(-3%,7%)}50%{transform:translate(-8%,3%)}60%{transform:translate(6%,0)}70%{transform:translate(0,6%)}80%{transform:translate(3%,8%)}90%{transform:translate(-6%,3%)}100%{transform:translate(0,0)}}
+  @keyframes recBlink{0%,49%{opacity:1}50%,100%{opacity:0.15}}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  @keyframes scrollDot{0%{transform:translateY(0);opacity:0}30%{opacity:1}70%{opacity:1}100%{transform:translateY(22px);opacity:0}}
+  @keyframes hueline{0%{background-position:0 0}100%{background-position:200px 0}}
+  /* hover-reveal enhancements only — base state is inline so it paints immediately */
+  [data-card]:hover [data-reveal-panel]{opacity:1 !important;transform:translateY(0) !important}
+  [data-card]:hover [data-card-media]{transform:scale(1.05);filter:saturate(1.12) contrast(1.04)}
+  [data-card]:hover [data-vf]{opacity:1 !important}
+  [data-card]:hover [data-card-num]{color:#f59e0b !important}
+  [data-social]:hover{color:#f59e0b !important;transform:translateX(6px)}
+  [data-nav-link]:hover{color:#f1e9dd !important}
+  [data-nav-link]:hover [data-nl-bar]{width:100% !important}
+  [data-cta]:hover{background:#f26411 !important;box-shadow:0 0 40px rgba(242,100,17,0.45) !important}
+  [data-cta]:hover [data-cta-arrow]{transform:translateX(5px)}
+  [data-skill]{transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s ease,color .3s ease,box-shadow .3s ease,background .3s ease}
+  [data-skill]:hover{transform:translateY(-5px);border-color:#f59e0b !important;color:#f1e9dd !important;background:rgba(22,20,15,0.92) !important;box-shadow:0 10px 30px rgba(245,158,11,0.3)}
+  [data-skill]:hover [data-skill-dot]{transform:scale(1.6);box-shadow:0 0 12px currentColor}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="position:relative;min-height:100vh;background:#0a0a0b">
+
+  <!-- FILM GRAIN + AMBIENT LIGHT LEAKS -->
+  <div style="position:fixed;inset:-60%;z-index:60;pointer-events:none;opacity:0.055;mix-blend-mode:overlay;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);animation:grainShift 7s steps(8) infinite"></div>
+  <div style="position:fixed;top:-10%;right:-10%;width:55vw;height:55vw;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(245,158,11,0.10),transparent 62%)"></div>
+  <div style="position:fixed;bottom:-20%;left:-12%;width:50vw;height:50vw;z-index:0;pointer-events:none;background:radial-gradient(circle,rgba(59,130,246,0.07),transparent 60%)"></div>
+
+  <!-- NAV -->
+  <nav ref="{{ navRef }}" style="position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;border-bottom:1px solid transparent;transition:background .4s ease,border-color .4s ease,padding .4s ease,backdrop-filter .4s ease">
+    <a href="#reel" style="display:flex;align-items:center;gap:14px">
+      <span style="font-family:'Bebas Neue';font-size:28px;letter-spacing:0.04em;line-height:1;color:#f1e9dd">CHALCO<span style="color:#f59e0b">.</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:34px">
+      <a data-nav-link href="#proyectos" style="position:relative;font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.16em;color:#9b9286;transition:color .3s">PROYECTOS<span data-nl-bar style="position:absolute;left:0;bottom:-6px;height:1px;width:0;background:#f59e0b;transition:width .3s"></span></a>
+      <a data-nav-link href="#about" style="position:relative;font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.16em;color:#9b9286;transition:color .3s">SOBRE<span data-nl-bar style="position:absolute;left:0;bottom:-6px;height:1px;width:0;background:#f59e0b;transition:width .3s"></span></a>
+      <a data-nav-link href="#skills" style="position:relative;font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.16em;color:#9b9286;transition:color .3s">STACK<span data-nl-bar style="position:absolute;left:0;bottom:-6px;height:1px;width:0;background:#f59e0b;transition:width .3s"></span></a>
+      <a data-nav-link href="#contacto" style="position:relative;font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.16em;color:#9b9286;transition:color .3s">CONTACTO<span data-nl-bar style="position:absolute;left:0;bottom:-6px;height:1px;width:0;background:#f59e0b;transition:width .3s"></span></a>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="reel" style="position:relative;height:100vh;min-height:680px;overflow:hidden;display:flex;align-items:center;justify-content:center">
+    <div ref="{{ heroBgRef }}" style="position:absolute;inset:-8% -4%;z-index:0;background-image:url(assets/embers.png);background-size:cover;background-position:center;will-change:transform"></div>
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,10,11,0.78) 0%,rgba(10,10,11,0.35) 38%,rgba(10,10,11,0.6) 72%,#0a0a0b 100%)"></div>
+    <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(10,10,11,0.55) 100%)"></div>
+    <div style="position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0.35;background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.5) 3px,rgba(0,0,0,0.5) 3px)"></div>
+
+    <!-- HERO CONTENT -->
+    <div ref="{{ heroContentRef }}" style="position:relative;z-index:6;text-align:center;padding:0 24px;will-change:transform">
+      <div style="display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:26px">
+        <span style="width:46px;height:1px;background:rgba(241,233,221,0.4)"></span>
+        <span style="font-family:'JetBrains Mono';font-size:13px;letter-spacing:0.42em;color:#f1e9dd">VFX &amp; AI ARTIST</span>
+        <span style="width:46px;height:1px;background:rgba(241,233,221,0.4)"></span>
+      </div>
+      <h1 style="margin:0;font-family:'Bebas Neue';font-weight:400;line-height:0.84;letter-spacing:0.005em">
+        <span style="display:block;font-size:clamp(88px,15vw,210px);color:#f1e9dd">CHALCO</span>
+        <span style="display:block;font-size:clamp(88px,15vw,210px);background:linear-gradient(180deg,#ffd9a0,#f59e0b 55%,#f26411);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">STUDIO</span>
+      </h1>
+      <p style="max-width:680px;margin:30px auto 0;font-size:clamp(16px,1.5vw,20px);line-height:1.55;color:#cabfb0">Creando en la intersección del movimiento, los sistemas y la forma.</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px">
+        <span data-skill style="display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#cfc5b6;padding:10px 17px;border:1px solid rgba(241,233,221,0.22);background:rgba(16,15,13,0.55);backdrop-filter:blur(8px);cursor:default"><span data-skill-dot style="width:6px;height:6px;background:#f59e0b;color:#f59e0b;transition:transform .3s ease,box-shadow .3s ease"></span>COMPOSITING</span>
+        <span data-skill style="display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#cfc5b6;padding:10px 17px;border:1px solid rgba(241,233,221,0.22);background:rgba(16,15,13,0.55);backdrop-filter:blur(8px);cursor:default"><span data-skill-dot style="width:6px;height:6px;background:#3b82f6;color:#3b82f6;transition:transform .3s ease,box-shadow .3s ease"></span>IA GENERATIVA</span>
+        <span data-skill style="display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#cfc5b6;padding:10px 17px;border:1px solid rgba(241,233,221,0.22);background:rgba(16,15,13,0.55);backdrop-filter:blur(8px);cursor:default"><span data-skill-dot style="width:6px;height:6px;background:#22d3ee;color:#22d3ee;transition:transform .3s ease,box-shadow .3s ease"></span>PYTHON</span>
+        <span data-skill style="display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#cfc5b6;padding:10px 17px;border:1px solid rgba(241,233,221,0.22);background:rgba(16,15,13,0.55);backdrop-filter:blur(8px);cursor:default"><span data-skill-dot style="width:6px;height:6px;background:#f59e0b;color:#f59e0b;transition:transform .3s ease,box-shadow .3s ease"></span>LINUX</span>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:center;gap:32px;margin-top:46px;flex-wrap:wrap">
+        <a data-cta href="#proyectos" style="display:inline-flex;align-items:center;gap:16px;background:#f59e0b;color:#0a0a0b;padding:19px 38px;font-family:'Bebas Neue';font-size:24px;letter-spacing:0.06em;transition:background .25s,box-shadow .25s">VER PROYECTOS <span data-cta-arrow style="display:inline-block;transition:transform .25s">▸</span></a>
+        <div style="display:grid;grid-template-columns:auto auto;gap:6px 26px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.12em;text-align:left">
+          <span style="color:#6f685e">STATUS <span style="color:#f59e0b">/ DISPONIBLE</span></span>
+          <span style="color:#6f685e">BASE <span style="color:#cabfb0">/ REMOTE_GLOBAL</span></span>
+          <span style="color:#6f685e">FOCO <span style="color:#cabfb0">/ VFX · IA</span></span>
+          <span style="color:#6f685e">STACK <span style="color:#cabfb0">/ HOUDINI · PY</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:absolute;left:50%;bottom:42px;transform:translateX(-50%);z-index:6;display:flex;flex-direction:column;align-items:center;gap:10px">
+      <span style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.3em;color:#8f8678">SCROLL</span>
+      <span style="position:relative;width:1px;height:34px;background:rgba(241,233,221,0.2);overflow:hidden"><span style="position:absolute;top:0;left:0;width:1px;height:10px;background:#f59e0b;animation:scrollDot 1.8s ease-in-out infinite"></span></span>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" data-reveal style="opacity:0;transform:translateY(46px);transition:opacity .9s ease,transform .9s ease;position:relative;z-index:5;max-width:1280px;margin:0 auto;padding:clamp(90px,12vh,150px) 48px">
+    <div style="display:grid;grid-template-columns:1fr;gap:72px;align-items:center">
+      <!-- bio -->
+      <div>
+        <div data-stagger style="opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.24em;color:#f59e0b;margin-bottom:18px">// SOBRE EL ARTISTA</div>
+        <h2 data-stagger style="opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);margin:0 0 28px;font-family:'Bebas Neue';font-weight:400;font-size:clamp(40px,5vw,68px);line-height:0.95;letter-spacing:0.01em">DONDE LA SIMULACIÓN<br>SE ENCUENTRA CON<br>EL <span style="color:#f59e0b">CÓDIGO</span></h2>
+        <p data-stagger style="opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);margin:0 0 18px;max-width:560px;font-size:17px;line-height:1.7;color:#bcb2a4">Artista de VFX y desarrollo de pipeline especializado en compositing nodal, simulación procedural e IA generativa. Construyo el puente entre la visión cinematográfica y los sistemas que la hacen posible — desde Houdini y Nuke hasta herramientas propias en Python.</p>
+        <p data-stagger style="opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);margin:0;max-width:560px;font-size:17px;line-height:1.7;color:#8f8678">Mi trabajo vive en la intersección de lo artístico y lo técnico: render farms en Linux, flujos de difusión en ComfyUI, y automatización que devuelve el tiempo a la parte creativa.</p>
+        <div data-stagger style="opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);display:flex;gap:48px;margin-top:42px;flex-wrap:wrap">
+          <div><div style="font-family:'Bebas Neue';font-size:54px;line-height:1;color:#f59e0b">4+</div><div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.14em;color:#6f685e;margin-top:6px">AÑOS EN PIPELINE</div></div>
+          <div><div style="font-family:'Bebas Neue';font-size:54px;line-height:1;color:#f1e9dd">3</div><div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.14em;color:#6f685e;margin-top:6px">DISCIPLINAS CLAVE</div></div>
+          <div><div style="font-family:'Bebas Neue';font-size:54px;line-height:1;color:#3b82f6">9</div><div style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.14em;color:#6f685e;margin-top:6px">HERRAMIENTAS EN STACK</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROYECTOS ===================== -->
+  <section id="proyectos" data-reveal style="opacity:0;transform:translateY(46px);transition:opacity .9s ease,transform .9s ease;position:relative;z-index:5;max-width:1280px;margin:0 auto;padding:clamp(70px,9vh,120px) 48px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:14px">
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.24em;color:#f59e0b;margin-bottom:14px">// SELECTED_WORKS</div>
+        <h2 style="margin:0;font-family:'Bebas Neue';font-weight:400;font-size:clamp(46px,6.5vw,92px);line-height:0.9">PROYECTOS</h2>
+      </div>
+    </div>
+
+    <!-- filters -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:32px 0 40px;border-top:1px solid rgba(241,233,221,0.08);border-bottom:1px solid rgba(241,233,221,0.08);padding:18px 0">
+      <sc-for list="{{ filterBtns }}" as="btn" hint-placeholder-count="4">
+        <button onClick="{{ btn.onClick }}" style="{{ btn.style }}">{{ btn.label }}</button>
+      </sc-for>
+    </div>
+
+    <!-- grid -->
+    <div data-projects-grid style="display:grid;grid-template-columns:1fr 1fr;gap:26px">
+      <sc-for list="{{ visibleProjects }}" as="p" hint-placeholder-count="4">
+        <a data-card data-project-card href="#contacto" style="opacity:1;clip-path:inset(0 0 100% 0);transition:clip-path .8s cubic-bezier(.22,.61,.36,1);position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#121211;border:1px solid rgba(241,233,221,0.07);cursor:pointer">
+          <!-- media -->
+          <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ true }}">
+            <div data-card-media style="position:absolute;inset:0;background-image:url({{ p.img }});background-size:cover;background-position:center;transition:transform .6s ease,filter .6s ease"></div>
+          </sc-if>
+          <sc-if value="{{ p.noImg }}" hint-placeholder-val="{{ true }}">
+            <div data-card-media style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,#131210,#131210 13px,#191713 13px,#191713 26px);display:flex;align-items:center;justify-content:center;transition:transform .6s ease,filter .6s ease">
+              <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.18em;color:#5f594f;border:1px dashed #38342b;padding:8px 13px">[ {{ p.ph }} ]</span>
+            </div>
+          </sc-if>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,11,0.15) 0%,transparent 30%,transparent 55%,rgba(10,10,11,0.92) 100%)"></div>
+          <div style="position:absolute;inset:0;pointer-events:none;opacity:0.25;background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.5) 3px)"></div>
+
+          <!-- index + category -->
+          <span data-card-num style="position:absolute;top:16px;left:18px;font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.12em;color:#9b9286;transition:color .3s">{{ p.num }}</span>
+          <span style="position:absolute;top:14px;right:16px;font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.14em;padding:5px 9px;background:rgba(10,10,11,0.55);backdrop-filter:blur(8px);border:1px solid {{ p.catBorder }};color:{{ p.catColor }}">{{ p.cat }}</span>
+
+          <!-- viewfinder marks (appear on hover) -->
+          <span data-vf style="position:absolute;top:12px;left:12px;width:18px;height:18px;border-left:1.5px solid #f59e0b;border-top:1.5px solid #f59e0b;opacity:0;transition:opacity .3s"></span>
+          <span data-vf style="position:absolute;bottom:12px;right:12px;width:18px;height:18px;border-right:1.5px solid #f59e0b;border-bottom:1.5px solid #f59e0b;opacity:0;transition:opacity .3s"></span>
+
+          <!-- reveal panel -->
+          <div data-reveal-panel style="position:absolute;left:0;right:0;bottom:0;padding:22px;opacity:0;transform:translateY(14px);transition:opacity .4s ease,transform .4s ease">
+            <h3 style="margin:0 0 8px;font-family:'Bebas Neue';font-weight:400;font-size:34px;line-height:0.95;letter-spacing:0.01em;color:#f1e9dd">{{ p.title }}</h3>
+            <div style="display:flex;gap:18px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.1em;color:#9b9286">
+              <span>{{ p.role }}</span><span>·</span><span>{{ p.soft }}</span><span>·</span><span style="color:#f59e0b">{{ p.year }}</span>
+            </div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===================== SKILLS CONSTELLATION ===================== -->
+  <section id="skills" data-reveal style="opacity:0;transform:translateY(46px);transition:opacity .9s ease,transform .9s ease;position:relative;z-index:5;max-width:1280px;margin:0 auto;padding:clamp(70px,9vh,120px) 48px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:40px">
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.24em;color:#f59e0b;margin-bottom:14px">// TECH_STACK</div>
+        <h2 style="margin:0;font-family:'Bebas Neue';font-weight:400;font-size:clamp(46px,6.5vw,92px);line-height:0.9">CAPACIDADES</h2>
+      </div>
+      <p style="max-width:340px;margin:0;font-size:15px;line-height:1.6;color:#8f8678">Un grafo de disciplinas conectadas. Pasa el cursor sobre cada nodo para trazar sus relaciones en el pipeline.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 280px;gap:32px;align-items:stretch">
+      <!-- graph board -->
+      <div style="position:relative;background:linear-gradient(180deg,#0e0d0c,#0b0a0a);border:1px solid rgba(241,233,221,0.07);aspect-ratio:5/3;overflow:hidden">
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(241,233,221,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(241,233,221,0.025) 1px,transparent 1px);background-size:48px 48px"></div>
+        <div style="position:absolute;top:14px;left:16px;font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.16em;color:#5f594f">GRAPH_VIEW / PIPELINE.usd</div>
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+          <sc-for list="{{ skillEdges }}" as="e" hint-placeholder-count="13">
+            <line x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" stroke="{{ e.stroke }}" stroke-width="{{ e.width }}" stroke-opacity="{{ e.opacity }}"></line>
+          </sc-for>
+        </svg>
+        <sc-for list="{{ skillNodes }}" as="n" hint-placeholder-count="9">
+          <div style="{{ n.wrapStyle }}">
+            <div onMouseEnter="{{ n.onEnter }}" onMouseLeave="{{ n.onLeave }}" style="{{ n.chipStyle }}">
+              <span style="{{ n.dotStyle }}"></span>{{ n.label }}
+              <sc-if value="{{ n.exploring }}" hint-placeholder-val="{{ false }}">
+                <span style="margin-left:8px;font-size:8px;letter-spacing:0.1em;color:#0a0a0b;background:#f59e0b;padding:2px 5px">EXPLORANDO</span>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- readout panel -->
+      <div style="display:flex;flex-direction:column;justify-content:space-between;background:#0e0d0c;border:1px solid rgba(241,233,221,0.07);padding:24px">
+        <div>
+          <div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.18em;color:#5f594f;margin-bottom:18px">NODE_INSPECTOR</div>
+          <div style="font-family:'Bebas Neue';font-size:42px;line-height:0.95;color:{{ readoutColor }};min-height:44px">{{ readoutTitle }}</div>
+          <div style="height:1px;background:rgba(241,233,221,0.1);margin:16px 0"></div>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#bcb2a4;min-height:66px">{{ readoutDesc }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px">
+          <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.1em;color:#8f8678"><span style="width:9px;height:9px;background:#f59e0b"></span>VFX / CORE</div>
+          <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.1em;color:#8f8678"><span style="width:9px;height:9px;background:#3b82f6"></span>IA &amp; TOOLS</div>
+          <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.1em;color:#8f8678"><span style="width:9px;height:9px;border:1px dashed #f59e0b"></span>EN EXPLORACIÓN</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACTO ===================== -->
+  <section id="contacto" data-reveal style="opacity:0;transform:translateY(46px);transition:opacity .9s ease,transform .9s ease;position:relative;z-index:5;max-width:1280px;margin:0 auto;padding:clamp(70px,9vh,120px) 48px clamp(60px,8vh,90px)">
+    <div style="display:grid;grid-template-columns:1.1fr 0.9fr;gap:72px">
+      <!-- left -->
+      <div>
+        <div style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.24em;color:#f59e0b;margin-bottom:16px">// LET'S_TALK</div>
+        <h2 style="margin:0 0 28px;font-family:'Bebas Neue';font-weight:400;font-size:clamp(56px,8vw,120px);line-height:0.86">HABLEMOS<br><span style="color:#f59e0b">DE TU PROYECTO</span></h2>
+        <p style="max-width:440px;font-size:17px;line-height:1.7;color:#bcb2a4;margin:0 0 36px">¿Tienes una secuencia imposible o un pipeline que automatizar? Disponible para colaboraciones de VFX, dirección técnica y proyectos de IA generativa.</p>
+        <a href="mailto:hola@chalco.studio" style="display:inline-block;font-family:'Bebas Neue';font-size:34px;letter-spacing:0.02em;color:#f1e9dd;border-bottom:2px solid #f59e0b;padding-bottom:4px;margin-bottom:40px">HOLA@CHALCO.STUDIO</a>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+          <sc-for list="{{ socials }}" as="s" hint-placeholder-count="4">
+            <a data-social href="{{ s.url }}" target="_blank" style="display:flex;align-items:center;gap:16px;font-family:'JetBrains Mono';font-size:13px;letter-spacing:0.12em;color:#9b9286;transition:color .3s,transform .3s">
+              <span style="color:#6f685e;min-width:26px">{{ s.num }}</span><span style="min-width:120px">{{ s.label }}</span><span style="color:#5f594f">{{ s.handle }}</span><span style="margin-left:auto">↗</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- form -->
+      <div style="position:relative;background:#0e0d0c;border:1px solid rgba(241,233,221,0.08);padding:38px 34px">
+        <div style="position:absolute;top:-9px;right:-9px;width:24px;height:24px;border-right:2px solid #f59e0b;border-top:2px solid #f59e0b"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:30px">
+          <span style="font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#6f685e">NEW_MESSAGE.txt</span>
+        </div>
+
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px 0">
+            <div style="width:58px;height:58px;border:2px solid #f59e0b;display:flex;align-items:center;justify-content:center;font-size:28px;color:#f59e0b;margin-bottom:22px">✓</div>
+            <div style="font-family:'Bebas Neue';font-size:38px;letter-spacing:0.02em;color:#f1e9dd">MENSAJE ENVIADO</div>
+            <p style="font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.1em;color:#8f8678;margin-top:10px">Respondo en 24–48h. Gracias.</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="margin-bottom:26px">
+              <label style="display:block;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#8f8678;margin-bottom:10px">NOMBRE</label>
+              <input value="{{ form.name }}" onInput="{{ onName }}" placeholder="Tu nombre" style="width:100%;background:transparent;border:none;border-bottom:1px solid {{ nameBorder }};color:#f1e9dd;font-size:16px;padding:8px 0;outline:none;transition:border-color .3s" />
+              <sc-if value="{{ err.name }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.08em;color:#f26411;margin-top:8px">{{ err.name }}</div></sc-if>
+            </div>
+            <div style="margin-bottom:26px">
+              <label style="display:block;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#8f8678;margin-bottom:10px">EMAIL</label>
+              <input value="{{ form.email }}" onInput="{{ onEmail }}" placeholder="tu@correo.com" style="width:100%;background:transparent;border:none;border-bottom:1px solid {{ emailBorder }};color:#f1e9dd;font-size:16px;padding:8px 0;outline:none;transition:border-color .3s" />
+              <sc-if value="{{ err.email }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.08em;color:#f26411;margin-top:8px">{{ err.email }}</div></sc-if>
+            </div>
+            <div style="margin-bottom:30px">
+              <label style="display:block;font-family:'JetBrains Mono';font-size:11px;letter-spacing:0.16em;color:#8f8678;margin-bottom:10px">MENSAJE</label>
+              <textarea value="{{ form.msg }}" onInput="{{ onMsg }}" placeholder="Cuéntame del proyecto…" rows="3" style="width:100%;background:transparent;border:none;border-bottom:1px solid {{ msgBorder }};color:#f1e9dd;font-size:16px;padding:8px 0;outline:none;resize:none;transition:border-color .3s"></textarea>
+              <sc-if value="{{ err.msg }}" hint-placeholder-val="{{ false }}"><div style="font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.08em;color:#f26411;margin-top:8px">{{ err.msg }}</div></sc-if>
+            </div>
+            <button onClick="{{ onSubmit }}" data-cta style="width:100%;background:#f59e0b;color:#0a0a0b;border:none;padding:18px;font-family:'Bebas Neue';font-size:22px;letter-spacing:0.06em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:14px;transition:background .25s,box-shadow .25s">ENVIAR MENSAJE <span data-cta-arrow style="display:inline-block;transition:transform .25s">▸</span></button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="position:relative;z-index:5;border-top:1px solid rgba(241,233,221,0.08);padding:26px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+    <span style="font-family:'Bebas Neue';font-size:22px;letter-spacing:0.04em;color:#3a362d">CHALCO STUDIO</span>
+    <div style="display:flex;gap:28px;flex-wrap:wrap;font-family:'JetBrains Mono';font-size:10px;letter-spacing:0.12em;color:#5f594f">
+      <span>© 2026 ALL_RIGHTS_RESERVED</span><span style="color:#6f685e">BUILT W/ ASTRO · GSAP · LENIS</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.rootRef = React.createRef();
+    this.navRef = React.createRef();
+    this.heroBgRef = React.createRef();
+    this.heroContentRef = React.createRef();
+    this.state = {
+      filter: 'Todos',
+      hovered: null,
+      form: { name:'', email:'', msg:'' },
+      err: { name:'', email:'', msg:'' },
+      sent: false,
+    };
+  }
+
+  componentDidMount(){
+    const root = this.rootRef.current;
+    this._reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scroller = document.scrollingElement || document.documentElement;
+    this.REVEAL_EASE = 'cubic-bezier(.22,.61,.36,1)';
+
+    // ---- per-frame render: nav state + hero parallax ----
+    const render = () => {
+      const y = window.scrollY || scroller.scrollTop || 0;
+      const vh = window.innerHeight || 800;
+      const nav = this.navRef.current;
+      if (nav){
+        if (y > 40){
+          nav.style.background = 'rgba(10,10,11,0.72)';
+          nav.style.backdropFilter = 'blur(16px)';
+          nav.style.webkitBackdropFilter = 'blur(16px)';
+          nav.style.borderBottomColor = 'rgba(241,233,221,0.08)';
+          nav.style.padding = '14px 48px';
+        } else {
+          nav.style.background = 'transparent';
+          nav.style.backdropFilter = 'none';
+          nav.style.webkitBackdropFilter = 'none';
+          nav.style.borderBottomColor = 'transparent';
+          nav.style.padding = '20px 48px';
+        }
+      }
+      const bg = this.heroBgRef.current;
+      if (bg && y < vh) bg.style.transform = 'translate3d(0,' + (y * 0.34).toFixed(1) + 'px,0) scale(1.1)';
+      const hc = this.heroContentRef.current;
+      if (hc && y < vh){
+        hc.style.transform = 'translate3d(0,' + (y * 0.18).toFixed(1) + 'px,0)';
+        hc.style.opacity = String(Math.max(0, 1 - y / (vh * 0.72)));
+      }
+    };
+    this._render = render;
+
+    // render on native scroll (rAF-throttled). Lenis performs real scroll, so this fires under Lenis too.
+    let ticking = false;
+    this._onScroll = () => {
+      if (!ticking){ ticking = true; requestAnimationFrame(() => { ticking = false; render(); }); }
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    render();
+
+    // ---- section fade-in ----
+    const els = root ? root.querySelectorAll('[data-reveal]') : [];
+    this._io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting){
+          en.target.style.opacity = '1';
+          en.target.style.transform = 'translateY(0)';
+          this._io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    els.forEach(el => this._io.observe(el));
+
+    // ---- per-element entrance: text blocks (project cards handled by GSAP below) ----
+    const items = root ? root.querySelectorAll('[data-stagger]') : [];
+    this._io2 = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting){
+          const el = en.target;
+          // sibling index → small cascade for items revealing together (grid rows, stat row)
+          let idx = 0, p = el.previousElementSibling;
+          while (p){ if (p.hasAttribute && p.hasAttribute('data-stagger')) idx++; p = p.previousElementSibling; }
+          el.style.transitionDelay = Math.min(idx * 0.07, 0.42) + 's';
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+          this._io2.unobserve(el);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -7% 0px' });
+    items.forEach(el => this._io2.observe(el));
+
+    // ---- Lenis (base layout) + GSAP ScrollTrigger: project cards clip-path reveal ----
+    this._motionReady = false;
+    const initMotion = () => {
+      if (this._motionReady) return true;
+      const Lenis = window.Lenis, gsap = window.gsap, ST = window.ScrollTrigger;
+      if (!gsap || !ST) return false;
+      this._motionReady = true;
+      gsap.registerPlugin(ST);
+
+      // Lenis initialised in the base layout BEFORE any ScrollTrigger is created.
+      const maxScroll = scroller.scrollHeight - (window.innerHeight || 0);
+      if (Lenis && !this._reduce && maxScroll > 1){
+        const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+        this._lenis = lenis;
+        lenis.on('scroll', () => { ST.update(); render(); });
+        this._tickerFn = (time) => { lenis.raf(time * 1000); };
+        gsap.ticker.add(this._tickerFn);
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      this._gsap = gsap;
+      this._ensureReveal();
+      // Safety net: React commits a post-mount update that can drop a trigger created
+      // during mount — re-arm once the DOM has settled.
+      setTimeout(() => this._ensureReveal(), 60);
+      setTimeout(() => this._ensureReveal(), 320);
+      ST.refresh();
+      return true;
+    };
+
+    if (!initMotion()){
+      let tries = 0;
+      this._poll = setInterval(() => {
+        if (initMotion() || ++tries > 70){
+          clearInterval(this._poll); this._poll = null;
+          if (!this._motionReady) this._fallbackReveal(); // CDN never arrived
+        }
+      }, 100);
+    }
+  }
+
+  // GSAP ScrollTrigger reveal for the projects grid. The trigger is pinned to the stable
+  // grid container; when it enters the viewport each card wipes up via clip-path
+  // inset(0 0 100% 0) → inset(0 0 0% 0) over 0.8s, staggered 0.15s. Idempotent &
+  // self-healing: framework re-renders can drop a freshly-created trigger, so this is
+  // re-invoked from componentDidUpdate / timers until a healthy 'proj-reveal' is armed.
+  _ensureReveal(attempt){
+    const gsap = this._gsap, ST = window.ScrollTrigger;
+    if (!gsap || !ST) return;
+
+    // already revealed → just keep any reused/replaced card nodes open
+    if (this._revealDone){
+      const g = document.querySelector('[data-projects-grid]');
+      if (g) g.querySelectorAll('[data-project-card]').forEach(c => { c.style.clipPath = 'inset(0 0 0% 0)'; });
+      return;
+    }
+    if (ST.getById('proj-reveal')) return; // healthy trigger already armed
+
+    const grid = document.querySelector('[data-projects-grid]');
+    const cards = grid ? grid.querySelectorAll('[data-project-card]') : [];
+    if (!grid || !cards.length){
+      if ((attempt || 0) < 40) setTimeout(() => this._ensureReveal((attempt || 0) + 1), 100);
+      return;
+    }
+
+    cards.forEach(c => { c.style.transition = 'none'; }); // GSAP owns clip-path from here
+    gsap.set(cards, { clipPath: 'inset(0 0 100% 0)' });
+    ST.create({
+      id: 'proj-reveal',
+      trigger: grid,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        const live = grid.querySelectorAll('[data-project-card]');
+        gsap.to(live, { clipPath: 'inset(0 0 0% 0)', duration: 0.8, stagger: 0.15, ease: 'power3.out' });
+        this._revealDone = true;
+      },
+    });
+    ST.refresh();
+  }
+
+  // No-GSAP fallback: reveal the cards with their inline clip-path CSS transition.
+  _fallbackReveal(){
+    const root = this.rootRef.current; if (!root) return;
+    const grid = root.querySelector('[data-projects-grid]'); if (!grid) return;
+    const cards = grid.querySelectorAll('[data-project-card]');
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)){
+        cards.forEach((c, i) => { c.style.transitionDelay = (i * 0.15) + 's'; c.style.clipPath = 'inset(0 0 0% 0)'; });
+        io.disconnect();
+      }
+    }, { threshold: 0.15 });
+    io.observe(grid);
+    this._fallbackIO = io;
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    const filterChanged = prevState && prevState.filter !== this.state.filter;
+    // Non-filter re-renders: keep the scroll-reveal armed (framework updates can drop it).
+    if (!filterChanged){ this._ensureReveal(); return; }
+    // Filter change → re-run the clip-path stagger on the freshly-rendered cards.
+    {
+      const gsap = this._gsap;
+      const ST = window.ScrollTrigger;
+      const grid = document.querySelector('[data-projects-grid]');
+      const cards = grid ? grid.querySelectorAll('[data-project-card]') : [];
+      if (!cards.length) return;
+      this._revealDone = true; // filtering happens inside the projects section → it's in view
+      if (ST && ST.getById('proj-reveal')) ST.getById('proj-reveal').kill();
+      if (gsap){
+        cards.forEach(c => { c.style.transition = 'none'; });
+        gsap.fromTo(cards,
+          { clipPath: 'inset(0 0 100% 0)' },
+          { clipPath: 'inset(0 0 0% 0)', duration: 0.8, stagger: 0.15, ease: 'power3.out' });
+      } else {
+        cards.forEach((c, i) => {
+          c.style.transition = 'clip-path .8s ' + this.REVEAL_EASE;
+          c.style.clipPath = 'inset(0 0 100% 0)';
+          requestAnimationFrame(() => { c.style.transitionDelay = (i * 0.15) + 's'; c.style.clipPath = 'inset(0 0 0% 0)'; });
+        });
+      }
+    }
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('scroll', this._onScroll);
+    if (this._io) this._io.disconnect();
+    if (this._io2) this._io2.disconnect();
+    if (this._fallbackIO) this._fallbackIO.disconnect();
+    if (this._poll) clearInterval(this._poll);
+    if (this._gsap && this._tickerFn) this._gsap.ticker.remove(this._tickerFn);
+    if (window.ScrollTrigger){
+      const t = window.ScrollTrigger.getById('proj-reveal');
+      if (t) t.kill();
+    }
+    if (this._lenis) this._lenis.destroy();
+  }
+
+  // ---- form handlers ----
+  setField(k, v){
+    this.setState(s => ({ form: { ...s.form, [k]: v }, err: { ...s.err, [k]: '' } }));
+  }
+  validate(){
+    const f = this.state.form;
+    const err = { name:'', email:'', msg:'' };
+    if (!f.name.trim()) err.name = '! CAMPO REQUERIDO';
+    if (!f.email.trim()) err.email = '! CAMPO REQUERIDO';
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email.trim())) err.email = '! EMAIL NO VÁLIDO';
+    if (!f.msg.trim()) err.msg = '! CAMPO REQUERIDO';
+    return err;
+  }
+
+  renderVals(){
+    const AMBER = '#f59e0b', BLUE = '#3b82f6', CYAN = '#22d3ee', CREAM = '#f1e9dd';
+    const { filter, hovered, form, err, sent } = this.state;
+
+    // ---------- PROJECTS ----------
+    const catMeta = {
+      'VFX': { color: AMBER, border: 'rgba(245,158,11,0.4)' },
+      'IA Generativa': { color: BLUE, border: 'rgba(59,130,246,0.4)' },
+      'Python Tools': { color: CYAN, border: 'rgba(34,211,238,0.4)' },
+    };
+    const PROJECTS = [
+      { id:'eter', title:'Éter // Disolución', cat:'VFX', role:'FX / Houdini', year:'2025', img:'assets/embers.png', ph:'', soft:'Houdini · Nuke' },
+      { id:'latente', title:'Campo Latente', cat:'IA Generativa', role:'Generative', year:'2025', img:null, ph:'AI FRAME 16:9', soft:'ComfyUI · SDXL' },
+      { id:'nodo', title:'Nodo Render', cat:'Python Tools', role:'Pipeline / CLI', year:'2024', img:null, ph:'TOOL UI CAPTURE', soft:'Python · Nuke API' },
+      { id:'espejo', title:'Ciudad Espejo', cat:'VFX', role:'Compositing', year:'2024', img:null, ph:'COMP PLATE 16:9', soft:'Nuke · Houdini' },
+      { id:'sintetico', title:'Sueño Sintético', cat:'IA Generativa', role:'Generative Film', year:'2025', img:'assets/reel-2024.png', ph:'', soft:'AnimateDiff' },
+      { id:'forja', title:'Forja CLI', cat:'Python Tools', role:'Automation', year:'2023', img:null, ph:'TERMINAL CAPTURE', soft:'Python · Bash · Linux' },
+    ];
+    const filtered = (filter === 'Todos') ? PROJECTS : PROJECTS.filter(p => p.cat === filter);
+    const visibleProjects = filtered.map((p, i) => {
+      const m = catMeta[p.cat];
+      return { ...p, hasImg: !!p.img, noImg: !p.img, num: String(i+1).padStart(2,'0') + ' /', catColor: m.color, catBorder: m.border };
+    });
+
+    // filter buttons
+    const filters = ['Todos','VFX','IA Generativa','Python Tools'];
+    const filterBtns = filters.map(f => {
+      const active = filter === f;
+      return {
+        label: f,
+        onClick: () => this.setState({ filter: f }),
+        style: 'cursor:pointer;font-family:\'JetBrains Mono\';font-size:12px;letter-spacing:0.12em;padding:9px 18px;transition:all .25s;border:1px solid '
+          + (active ? '#f59e0b' : 'rgba(241,233,221,0.14)')
+          + ';background:' + (active ? '#f59e0b' : 'transparent')
+          + ';color:' + (active ? '#0a0a0b' : '#9b9286'),
+      };
+    });
+
+    // ---------- SKILLS GRAPH ----------
+    const NODES = [
+      { id:'houdini', label:'Houdini', kind:'core', x:30, y:16, desc:'Pyro, fluidos y destrucción procedural.' },
+      { id:'nuke', label:'Nuke', kind:'core', x:72, y:18, desc:'Compositing nodal, keying y cleanup 2D.' },
+      { id:'comp', label:'Compositing', kind:'core', x:50, y:36, desc:'Integración multicapa, grading e integración 3D/2D.' },
+      { id:'vfx', label:'VFX', kind:'core', x:24, y:48, desc:'Simulación, FX y dirección técnica de secuencias.' },
+      { id:'genai', label:'IA Generativa', kind:'ai', x:68, y:52, desc:'Difusión, video generativo y síntesis visual.' },
+      { id:'comfy', label:'ComfyUI', kind:'ai', x:88, y:38, desc:'Pipelines de difusión por nodos y control fino.' },
+      { id:'python', label:'Python', kind:'ai', x:40, y:70, desc:'Herramientas propias, automatización y pipeline.' },
+      { id:'linux', label:'Linux', kind:'ai', x:16, y:80, desc:'Render farm, entornos headless y scripting.' },
+      { id:'omni', label:'NVIDIA Omniverse', kind:'explore', x:72, y:82, desc:'USD y simulación física colaborativa — en exploración.' },
+    ];
+    const CONNS = [
+      ['vfx','comp'],['vfx','houdini'],['vfx','nuke'],['comp','nuke'],['comp','houdini'],
+      ['vfx','genai'],['genai','comfy'],['genai','python'],['python','linux'],['python','nuke'],
+      ['vfx','python'],['genai','omni'],['python','omni'],['comp','genai'],
+    ];
+    const byId = {}; NODES.forEach(n => byId[n.id] = n);
+    const accentOf = (n) => n.kind === 'ai' ? BLUE : AMBER;
+    // neighbours of hovered
+    const neighbours = new Set();
+    if (hovered){
+      CONNS.forEach(([a,b]) => { if (a===hovered) neighbours.add(b); if (b===hovered) neighbours.add(a); });
+    }
+    const hoveredNode = hovered ? byId[hovered] : null;
+    const hoverAccent = hoveredNode ? accentOf(hoveredNode) : AMBER;
+
+    const skillEdges = CONNS.map(([a,b]) => {
+      const A = byId[a], B = byId[b];
+      const active = hovered && (a === hovered || b === hovered);
+      return {
+        key: a+'-'+b,
+        x1: A.x*10, y1: A.y*6, x2: B.x*10, y2: B.y*6,
+        stroke: active ? hoverAccent : '#f1e9dd',
+        width: active ? 1.8 : 0.7,
+        opacity: hovered ? (active ? 0.85 : 0.06) : 0.13,
+      };
+    });
+
+    const skillNodes = NODES.map((n, i) => {
+      const accent = accentOf(n);
+      const isHover = hovered === n.id;
+      const isRelated = neighbours.has(n.id);
+      const dimmed = hovered && !isHover && !isRelated;
+      const lit = isHover || isRelated;
+      const wrapStyle = 'position:absolute;left:' + n.x + '%;top:' + n.y + '%;transform:translate(-50%,-50%);z-index:' + (isHover?5:2) + ';transition:opacity .3s;opacity:' + (dimmed ? 0.28 : 1);
+      const chipStyle = [
+        'display:inline-flex;align-items:center;white-space:nowrap;cursor:pointer',
+        'font-family:\'JetBrains Mono\';font-size:13px;letter-spacing:0.06em',
+        'padding:9px 15px',
+        'background:' + (isHover ? 'rgba(20,18,15,0.95)' : 'rgba(16,15,13,0.78)'),
+        'backdrop-filter:blur(8px)',
+        'color:' + (lit ? CREAM : '#9b9286'),
+        'border:1px ' + (n.kind==='explore' ? 'dashed' : 'solid') + ' ' + (lit ? accent : 'rgba(241,233,221,0.14)'),
+        'box-shadow:' + (lit ? '0 0 26px ' + (n.kind==='ai'?'rgba(59,130,246,0.4)':'rgba(245,158,11,0.4)') : 'none'),
+        'transition:all .3s ease',
+        'transform:scale(' + (isHover ? 1.08 : 1) + ')',
+        'animation:floaty ' + (6 + (i%4)) + 's ease-in-out infinite',
+        'animation-delay:' + (i * 0.45) + 's',
+      ].join(';');
+      const dotStyle = 'width:8px;height:8px;margin-right:9px;flex:none;background:' + (n.kind==='explore' ? 'transparent' : accent) + ';border:' + (n.kind==='explore' ? '1px solid '+accent : 'none') + ';box-shadow:' + (lit && n.kind!=='explore' ? '0 0 10px '+accent : 'none');
+      return {
+        id: n.id, label: n.label, exploring: n.kind === 'explore',
+        wrapStyle, chipStyle, dotStyle,
+        onEnter: () => this.setState({ hovered: n.id }),
+        onLeave: () => this.setState({ hovered: null }),
+      };
+    });
+
+    // readout
+    const readoutTitle = hoveredNode ? hoveredNode.label : 'STANDBY';
+    const readoutDesc = hoveredNode ? hoveredNode.desc : 'Pasa el cursor sobre un nodo del grafo para inspeccionar su rol y conexiones dentro del pipeline.';
+    const readoutColor = hoveredNode ? hoverAccent : '#3a362d';
+
+    // ---------- SOCIALS ----------
+    const socials = [
+      { num:'01', label:'GITHUB', handle:'@chalco-dev', url:'https://github.com' },
+      { num:'02', label:'LINKEDIN', handle:'/in/chalco', url:'https://linkedin.com' },
+      { num:'03', label:'VIMEO', handle:'/chalcostudio', url:'https://vimeo.com' },
+      { num:'04', label:'BEHANCE', handle:'/chalco', url:'https://behance.net' },
+    ];
+
+    // ---------- FORM ----------
+    const fieldBorder = (k) => err[k] ? '#f26411' : (form[k] ? '#f59e0b' : 'rgba(241,233,221,0.22)');
+
+    return {
+      // refs
+      rootRef: this.rootRef, navRef: this.navRef, heroBgRef: this.heroBgRef, heroContentRef: this.heroContentRef,
+      // projects
+      visibleProjects, filterBtns,
+      // skills
+      skillEdges, skillNodes, readoutTitle, readoutDesc, readoutColor,
+      // socials
+      socials,
+      // form
+      form, err, sent, notSent: !sent,
+      nameBorder: fieldBorder('name'), emailBorder: fieldBorder('email'), msgBorder: fieldBorder('msg'),
+      onName: (e) => this.setField('name', e.target.value),
+      onEmail: (e) => this.setField('email', e.target.value),
+      onMsg: (e) => this.setField('msg', e.target.value),
+      onSubmit: () => {
+        const er = this.validate();
+        if (er.name || er.email || er.msg){ this.setState({ err: er }); return; }
+        this.setState({ sent: true });
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

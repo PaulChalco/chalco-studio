@@ -1,0 +1,107 @@
+---
+interface Props {
+  vimeoId: string;
+  vimeoHash?: string;
+  thumbnail: string;
+  title: string;
+  orientation?: 'horizontal' | 'vertical';
+}
+const { vimeoId, vimeoHash, thumbnail, title, orientation = 'horizontal' } = Astro.props;
+const aspectClass = orientation === 'vertical' ? 'aspect-[9/16]' : 'aspect-video';
+const hashParam = vimeoHash ? `&h=${vimeoHash}` : '';
+const embedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=0&title=0&byline=0&portrait=0&dnt=1&color=f59e0b${hashParam}`;
+---
+
+<div class={`vp-root relative w-full ${aspectClass} bg-surface overflow-hidden rounded-xl border border-white/5 shadow-inner`} data-vimeo-id={vimeoId} data-embed-url={embedUrl}>
+  <!-- Thumbnail state -->
+  <div class="vp-thumb absolute inset-0 cursor-pointer transition-all duration-700 ease-out group" aria-label={`Reproducir ${title}`}>
+    <img
+      src={thumbnail}
+      alt={title}
+      loading="lazy"
+      decoding="async"
+      class="vp-img w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+    />
+    <div class="vp-overlay absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent"></div>
+    <button class="vp-play absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-secondary/40 bg-secondary/10 text-secondary cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-xs hover:border-secondary hover:bg-secondary/20 hover:scale-110 active:scale-95 shadow-lg shadow-secondary/15" aria-label="Reproducir video">
+      <span class="vp-play-icon text-xl ml-1">▶</span>
+    </button>
+  </div>
+
+  <!-- Player state (empty until click) -->
+  <div class="vp-player absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-500 flex items-center justify-center" aria-hidden="true">
+    <button class="vp-close absolute top-4 right-4 z-20 w-9 h-9 rounded-full border border-white/10 bg-black/60 text-white/70 cursor-pointer text-sm flex items-center justify-center transition-all duration-300 backdrop-blur-md hover:bg-black/90 hover:text-white hover:border-white/30" aria-label="Cerrar video">✕</button>
+  </div>
+</div>
+
+<style>
+  .vp-thumb.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .vp-player.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .vp-player.active .vp-close {
+    opacity: 1;
+    pointer-events: all;
+  }
+</style>
+
+<script>
+  function setupPlayers() {
+    document.querySelectorAll<HTMLElement>('.vp-root').forEach((root) => {
+      // Prevent double bindings
+      if (root.dataset.initialized) return;
+      root.dataset.initialized = 'true';
+
+      const thumb = root.querySelector<HTMLElement>('.vp-thumb')!;
+      const player = root.querySelector<HTMLElement>('.vp-player')!;
+      const playBtn = root.querySelector<HTMLElement>('.vp-play')!;
+      const closeBtn = root.querySelector<HTMLElement>('.vp-close')!;
+      const embedUrl = root.dataset.embedUrl!;
+
+      function openPlayer() {
+        if (!player.querySelector('iframe')) {
+          const iframe = document.createElement('iframe');
+          iframe.src = embedUrl;
+          iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+          iframe.setAttribute('allowfullscreen', '');
+          iframe.className = 'w-full h-full border-none rounded-xl';
+          player.insertBefore(iframe, closeBtn);
+        }
+        thumb.classList.add('hidden');
+        player.classList.add('active');
+        player.setAttribute('aria-hidden', 'false');
+      }
+
+      function closePlayer() {
+        player.classList.remove('active');
+        thumb.classList.remove('hidden');
+        player.setAttribute('aria-hidden', 'true');
+        const iframe = player.querySelector('iframe');
+        if (iframe) iframe.remove();
+      }
+
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openPlayer();
+      });
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePlayer();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && player.classList.contains('active')) {
+          closePlayer();
+        }
+      });
+    });
+  }
+
+  // Setup on load and after page transitions if any
+  setupPlayers();
+  document.addEventListener('astro:page-load', setupPlayers);
+</script>
