@@ -1,189 +1,41 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Section from "../components/Section.astro";
-import Reveal from "../components/Reveal.astro";
 ---
 
-<Layout
-	title="Chalco Studio · Test Page"
-	description="Página de prueba del motor de scroll y reveals de la Fase B."
->
-	<main class="test-page">
-		<!-- Section 1: Intro / Welcome -->
-		<Section id="welcome">
-			<div class="intro-box">
-				<span class="label">// CHALCO_STUDIO.SYS</span>
-				<h1 class="display-title">
-					CHALCO <span class="accent">STUDIO</span>
-				</h1>
-				<p class="tagline">MOTOR DE MOVIMIENTO CENTRALIZADO (FASE B)</p>
-			</div>
-		</Section>
-
-		<!-- Section 2: Tall Scroll Content with Reveals -->
-		<Section id="features">
-			<div class="card-grid">
-				<Reveal y={60}>
-					<div class="card">
-						<h3>01 / ENGINE INITIALIZED</h3>
-						<p>
-							Lenis smooth scrolling connected directly to the
-							GSAP ScrollTrigger ticker. Scroll inertia is now
-							active.
-						</p>
-					</div>
-				</Reveal>
-
-				<Reveal delay={0.2} y={60}>
-					<div class="card">
-						<h3>02 / PREFERS REDUCED MOTION</h3>
-						<p>
-							System settings are automatically detected. If
-							reduced motion is preferred, animations and inertia
-							are disabled.
-						</p>
-					</div>
-				</Reveal>
-
-				<Reveal delay={0.4} y={60}>
-					<div class="card">
-						<h3>03 / PRIMITIVES SYSTEM</h3>
-						<p>
-							Layout primitives Section and Reveal wrapper allow
-							clean, isolated component designs with modular CSS
-							styles.
-						</p>
-					</div>
-				</Reveal>
-			</div>
-		</Section>
-
-		<!-- Section 3: Extra high element to force scroll -->
-		<Section id="scroll-pad">
-			<div class="scroll-pad-content">
-				<Reveal y={100}>
-					<span class="label">// MOTION_CHECKPOINT</span>
-					<h2 class="sub-title">VERIFYING GSAP TRIGGER BOUNDARIES</h2>
-				</Reveal>
-
-				<div class="spacer"></div>
-
-				<Reveal y={40} delay={0.1}>
-					<p class="status-text">
-						IF YOU SEE THIS REVEAL LATER AS YOU SCROLL, THE
-						SCROLLTRIGGER SCROLLER AND DEVIATION ARE WORKING
-						PERFECTLY.
-					</p>
-				</Reveal>
-			</div>
-		</Section>
-	</main>
+<Layout title="Chalco Studio · VFX + AI" description="Sitio oficial de Chalco Studio. Creando en la intersección de VFX y AI.">
+  <main>
+    <!-- Placeholder para visualizar el scroll y la respuesta del Nav / Footer -->
+    <Section id="scroll-placeholder">
+      <div class="placeholder-content">
+        <p>// CHALCO_STUDIO FRAMEWORK INSTALLED</p>
+        <p class="desc">Nav, footer, film grain, ambient leaks, and motion engine are active. Hero section placeholder.</p>
+      </div>
+    </Section>
+  </main>
 </Layout>
 
 <style>
-	.test-page {
-		min-height: 200vh;
-		padding-bottom: 10rem;
-	}
+  .placeholder-content {
+    min-height: 140vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed var(--color-dim-2);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    color: var(--color-muted);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 2rem;
+  }
 
-	.intro-box {
-		margin-top: 4rem;
-	}
-
-	.label {
-		font-family: var(--font-mono);
-		color: var(--color-amber);
-		font-size: 0.875rem;
-		letter-spacing: 0.2em;
-		display: block;
-		margin-bottom: 1rem;
-	}
-
-	.display-title {
-		font-family: var(--font-display);
-		font-size: clamp(4rem, 10vw, 8rem);
-		line-height: 0.9;
-		margin: 0;
-		font-weight: normal;
-	}
-
-	.accent {
-		color: var(--color-amber);
-		background: linear-gradient(
-			135deg,
-			var(--color-amber),
-			var(--color-orange)
-		);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.tagline {
-		font-family: var(--font-mono);
-		color: var(--color-muted);
-		font-size: 1rem;
-		margin-top: 1.5rem;
-		letter-spacing: 0.05em;
-	}
-
-	.card-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 2rem;
-		margin-top: 4rem;
-	}
-
-	@media (min-width: 768px) {
-		.card-grid {
-			grid-template-columns: repeat(3, 1fr);
-		}
-	}
-
-	.card {
-		background-color: var(--color-surface);
-		border: 1px solid var(--color-dim-2);
-		padding: 2.5rem;
-		border-radius: 4px;
-		height: 100%;
-	}
-
-	.card h3 {
-		font-family: var(--font-mono);
-		color: var(--color-cream);
-		font-size: 1.1rem;
-		margin-top: 0;
-		margin-bottom: 1rem;
-	}
-
-	.card p {
-		color: var(--color-muted);
-		line-height: 1.6;
-		font-size: 0.95rem;
-		margin: 0;
-	}
-
-	.scroll-pad-content {
-		background-color: var(--color-surface-2);
-		padding: 4rem 2rem;
-		border-radius: 6px;
-		border: 1px dashed var(--color-dim);
-	}
-
-	.sub-title {
-		font-family: var(--font-display);
-		font-size: 3rem;
-		font-weight: normal;
-		margin-top: 0;
-		margin-bottom: 2rem;
-	}
-
-	.spacer {
-		height: 400px; /* Force internal separation to test viewport entry triggers */
-	}
-
-	.status-text {
-		font-family: var(--font-mono);
-		color: var(--color-cyan);
-		font-size: 1rem;
-	}
+  .desc {
+    margin-top: 1rem;
+    color: var(--color-dim);
+    font-size: 12px;
+    max-width: 400px;
+  }
 </style>

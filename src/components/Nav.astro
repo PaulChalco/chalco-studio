@@ -1,0 +1,120 @@
+---
+---
+<nav class="main-nav">
+  <a href="#welcome" class="logo">
+    CHALCO<span class="dot">.</span>
+  </a>
+  <div class="nav-links">
+    <a href="#proyectos" data-nav-link>PROYECTOS<span class="nl-bar"></span></a>
+    <a href="#about" data-nav-link>SOBRE<span class="nl-bar"></span></a>
+    <a href="#skills" data-nav-link>STACK<span class="nl-bar"></span></a>
+    <a href="#contacto" data-nav-link>CONTACTO<span class="nl-bar"></span></a>
+  </div>
+</nav>
+
+<style>
+  .main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s ease, border-color 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease;
+  }
+
+  .main-nav.scrolled {
+    background: rgba(10, 10, 11, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom-color: rgba(241, 233, 221, 0.08);
+    padding: 14px 48px;
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--color-cream);
+    text-decoration: none;
+  }
+
+  .dot {
+    color: var(--color-amber);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+  }
+
+  .nav-links a {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover {
+    color: var(--color-cream);
+  }
+
+  .nl-bar {
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    height: 1px;
+    width: 0;
+    background: var(--color-amber);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover .nl-bar {
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .main-nav {
+      padding: 16px 24px;
+    }
+    .main-nav.scrolled {
+      padding: 12px 24px;
+    }
+    .nav-links {
+      gap: 16px;
+    }
+  }
+</style>
+
+<script>
+  function initNavScroll() {
+    const nav = document.querySelector('.main-nav');
+    if (!nav) return;
+
+    const handleScroll = () => {
+      const y = window.scrollY;
+      if (y > 40) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Initial call in case page is loaded with scroll already
+    handleScroll();
+  }
+
+  // Initialize on load and page transition
+  initNavScroll();
+  document.addEventListener('astro:page-load', initNavScroll);
+</script>

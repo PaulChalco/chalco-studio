@@ -1,5 +1,8 @@
 ---
 import "../styles/global.css";
+import Grain from "../components/Grain.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
   title?: string;
@@ -25,7 +28,10 @@ const {
     <meta name="description" content={description} />
   </head>
   <body>
+    <Grain />
+    <Nav />
     <slot />
+    <Footer />
 
     <script>
       import { initMotion } from "../scripts/motion";

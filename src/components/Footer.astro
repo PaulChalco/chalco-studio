@@ -1,0 +1,104 @@
+---
+
+---
+
+<footer class="main-footer">
+  <div class="footer-left">
+    <span class="footer-logo">CHALCO STUDIO</span>
+    <div class="footer-links">
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+        >GITHUB</a
+      >
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+        >LINKEDIN</a
+      >
+      <a href="https://vimeo.com" target="_blank" rel="noopener noreferrer"
+        >VIMEO</a
+      >
+      <a
+        href="https://huggingface.co/chalcodevp"
+        target="_blank"
+        rel="noopener noreferrer">HUGGINGFACE</a
+      >
+    </div>
+  </div>
+  <div class="footer-right">
+    <span>© 2026 ALL_RIGHTS_RESERVED</span>
+    <span class="tech-stack">BUILT W/ ASTRO · GSAP · LENIS</span>
+  </div>
+</footer>
+
+<style>
+  .main-footer {
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid rgba(241, 233, 221, 0.08);
+    padding: 26px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    background-color: var(--color-ink);
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: var(--color-dim-2);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-links a:hover {
+    color: var(--color-amber);
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--color-dim);
+  }
+
+  .tech-stack {
+    color: var(--color-muted-2);
+  }
+
+  @media (max-width: 768px) {
+    .main-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px;
+      gap: 24px;
+    }
+    .footer-left {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  }
+</style>
