@@ -1,0 +1,27 @@
+---
+interface Props {
+  delay?: number;
+  y?: number;
+}
+
+const { delay = 0, y = 46 } = Astro.props;
+---
+
+<div class="reveal-wrapper" data-reveal data-delay={delay} data-y={y}>
+  <slot />
+</div>
+
+<style>
+  .reveal-wrapper {
+    will-change: transform, opacity;
+  }
+</style>
+
+<style is:global>
+  /* FOUC avoidance: Hide elements before animation begins, only if JS is active and reduced-motion is not requested */
+  @media (prefers-reduced-motion: no-preference) {
+    .js-reveal [data-reveal] {
+      opacity: 0;
+    }
+  }
+</style>

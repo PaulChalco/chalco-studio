@@ -1,0 +1,40 @@
+---
+interface Props {
+  id?: string;
+  class?: string;
+}
+
+const { id, class: className } = Astro.props;
+---
+
+<section id={id} class:list={["section-container", className]}>
+  <div class="section-content">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section-container {
+    width: 100%;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .section-container {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+
+  .section-content {
+    width: 100%;
+    max-width: 80rem; /* Equivale a max-w-7xl (1280px) */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>

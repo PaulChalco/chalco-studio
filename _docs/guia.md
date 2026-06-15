@@ -240,7 +240,7 @@ status             # 'live' | 'in-progress' | 'planned', default 'live'
 3. **Construir fase por fase**, confirmando antes de seguir. Mostrar diffs, no archivos completos.
 4. **Conservar lo que funciona:** `.reveal`, `VimeoPlayer`, lógica de filtros. No reemplazar sin justificación.
 5. **El mockup es React — traducir a Astro**, no copiar. React solo como isla aislada para el grafo si se decide.
-6. **GSAP/Lenis por capas, al final.** GSAP desde CDN; Lenis primero, luego `ScrollTrigger.scrollerProxy`.
+6. **GSAP/Lenis por capas, al final.** GSAP desde npm; Lenis primero, luego `ScrollTrigger.scrollerProxy`.
 7. CSS en `<style>` y JS en `<script>` por componente. No mezclar.
 8. Colores y tipografías como variables en `@theme`. Nada hardcodeado.
 9. `prefers-reduced-motion`: pausar todas las animaciones con `matchMedia`. Ya contemplado en `global.css`.
