@@ -91,6 +91,21 @@ export function initMotion() {
 
   // Run reveal animations
   initReveals();
+
+  // Centralized Hero Parallax ScrollTrigger setup
+  const heroBg = document.querySelector("[data-hero-bg]");
+  if (heroBg) {
+    gsap.to(heroBg, {
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      },
+      yPercent: 20,
+      ease: "none",
+    });
+  }
 }
 
 export function getLenis() {
