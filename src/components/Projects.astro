@@ -1,0 +1,134 @@
+---
+import { getCollection } from "astro:content";
+import Section from "./Section.astro";
+import ProjectEntry from "./ProjectEntry.astro";
+import Reveal from "./Reveal.astro";
+
+const allProjects = await getCollection("projects");
+const sortedProjects = allProjects.sort((a, b) => b.data.year - a.data.year);
+
+const showreels = sortedProjects.filter(p => p.data.category === "Showreel");
+const procesos = sortedProjects.filter(p => p.data.category !== "Showreel");
+---
+
+<Section id="proyectos" class="projects-section">
+  <!-- Section Title -->
+  <div class="section-header">
+    <Reveal>
+      <div class="section-label">// SELECTED_WORKS</div>
+      <h2 class="section-title">PROYECTOS</h2>
+    </Reveal>
+  </div>
+
+  <!-- ZONE 1: SHOWREELS -->
+  {showreels.length > 0 && (
+    <div class="projects-zone">
+      <Reveal>
+        <h3 class="zone-header">// 01_SHOWREELS</h3>
+      </Reveal>
+      <div class="projects-list">
+        {showreels.map((project, idx) => (
+          <Reveal delay={idx * 0.1}>
+            <ProjectEntry
+              slug={project.id}
+              title={project.data.title}
+              year={project.data.year}
+              category={project.data.category}
+              tags={project.data.tags}
+              description={project.data.description}
+              vimeoId={project.data.vimeoId}
+              vimeoHash={project.data.vimeoHash}
+              thumbnail={project.data.thumbnail}
+              featured={project.data.featured}
+              status={project.data.status}
+              index={idx}
+            />
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- ZONE 2: PROCESO -->
+  {procesos.length > 0 && (
+    <div class="projects-zone">
+      <Reveal>
+        <h3 class="zone-header">// 02_PROCESO</h3>
+      </Reveal>
+      <div class="projects-list">
+        {procesos.map((project, idx) => (
+          <Reveal delay={idx * 0.1}>
+            <ProjectEntry
+              slug={project.id}
+              title={project.data.title}
+              year={project.data.year}
+              category={project.data.category}
+              tags={project.data.tags}
+              description={project.data.description}
+              vimeoId={project.data.vimeoId}
+              vimeoHash={project.data.vimeoHash}
+              thumbnail={project.data.thumbnail}
+              featured={project.data.featured}
+              status={project.data.status}
+              index={idx}
+            />
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  )}
+</Section>
+
+<style>
+  .projects-section {
+    background-color: var(--color-ink);
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .section-header {
+    margin-bottom: 5rem;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    color: var(--color-amber);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    color: var(--color-cream);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .projects-zone {
+    margin-bottom: 6rem;
+  }
+
+  .projects-zone:last-child {
+    margin-bottom: 0;
+  }
+
+  .zone-header {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--color-muted-2);
+    border-bottom: 1px solid rgba(241, 233, 221, 0.08);
+    padding-bottom: 0.75rem;
+    margin-bottom: 3.5rem;
+    text-transform: uppercase;
+  }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

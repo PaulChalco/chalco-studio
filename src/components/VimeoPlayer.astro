@@ -22,8 +22,8 @@ const embedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=0&ti
       decoding="async"
       class="vp-img w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
     />
-    <div class="vp-overlay absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent"></div>
-    <button class="vp-play absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-secondary/40 bg-secondary/10 text-secondary cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-xs hover:border-secondary hover:bg-secondary/20 hover:scale-110 active:scale-95 shadow-lg shadow-secondary/15" aria-label="Reproducir video">
+    <div class="vp-overlay absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/40 to-transparent"></div>
+    <button class="vp-play absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-amber/40 bg-amber/10 text-amber cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-xs hover:border-amber hover:bg-amber/20 hover:scale-110 active:scale-95 shadow-lg shadow-amber/15" aria-label="Reproducir video">
       <span class="vp-play-icon text-xl ml-1">▶</span>
     </button>
   </div>
@@ -35,7 +35,7 @@ const embedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=0&ti
 </div>
 
 <style>
-  .vp-thumb.hidden {
+  .vp-thumb.is-hidden {
     opacity: 0;
     pointer-events: none;
   }
@@ -71,14 +71,14 @@ const embedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=0&ti
           iframe.className = 'w-full h-full border-none rounded-xl';
           player.insertBefore(iframe, closeBtn);
         }
-        thumb.classList.add('hidden');
+        thumb.classList.add('is-hidden');
         player.classList.add('active');
         player.setAttribute('aria-hidden', 'false');
       }
 
       function closePlayer() {
         player.classList.remove('active');
-        thumb.classList.remove('hidden');
+        thumb.classList.remove('is-hidden');
         player.setAttribute('aria-hidden', 'true');
         const iframe = player.querySelector('iframe');
         if (iframe) iframe.remove();

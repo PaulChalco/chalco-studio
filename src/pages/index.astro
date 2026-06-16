@@ -1,21 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
-import Section from "../components/Section.astro";
+import Projects from "../components/Projects.astro";
 ---
 
-<Layout title="Chalco Studio · VFX + AI" description="Sitio oficial de Chalco Studio. Creando en la intersección de VFX y AI.">
+<Layout
+  title="Chalco Studio · VFX + AI"
+  description="Sitio oficial de Chalco Studio. Creando en la intersección de VFX y AI."
+>
   <main>
     <Hero />
-    <!-- Section vacía con altura para probar el scroll y el parallax del hero -->
-    <Section id="scroll-test" class="scroll-test-section" />
+    <Projects />
   </main>
 </Layout>
-
-<style>
-  .scroll-test-section {
-    min-height: 120vh;
-    background-color: var(--color-ink);
-    border-top: 1px solid var(--color-dim-2);
-  }
-</style>

@@ -1,0 +1,237 @@
+---
+import VimeoPlayer from "./VimeoPlayer.astro";
+
+interface Props {
+  title: string;
+  slug: string;
+  year: number;
+  category: string;
+  tags: string[];
+  description: string;
+  vimeoId: string;
+  vimeoHash?: string;
+  thumbnail: string;
+  featured?: boolean;
+  status?: "live" | "in-progress" | "planned";
+  index: number;
+}
+
+const {
+  title,
+  year,
+  category,
+  tags,
+  description,
+  vimeoId,
+  vimeoHash = "",
+  thumbnail,
+  index,
+} = Astro.props;
+
+const formattedIndex = String(index + 1).padStart(2, "0");
+const isOdd = index % 2 === 1;
+const metaFrom = index % 2 === 0 ? "right" : "left";
+---
+
+<div class={`project-entry ${isOdd ? "odd" : "even"}`}>
+  <div class="video-col">
+    <VimeoPlayer
+      vimeoId={vimeoId}
+      vimeoHash={vimeoHash}
+      thumbnail={thumbnail}
+      title={title}
+    />
+  </div>
+  <div class="meta-col">
+    <div class="index-num" data-anim="rotate" data-deg="15">
+      {formattedIndex}
+    </div>
+    <div class="meta-content">
+      <div class="meta-top" data-anim="slide-x" data-from={metaFrom}>
+        <span class="category">{category}</span>
+        <span class="sep">·</span>
+        <span class="year">{year}</span>
+      </div>
+      <h3 class="project-title" data-anim="dolly">{title}</h3>
+      <p class="project-desc" data-anim="write">{description}</p>
+      <div class="project-tags">
+        {tags.map((tag) => <span class="tag-chip">{tag}</span>)}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* FOUC avoidance for scroll-driven animations */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js-reveal) [data-anim="dolly"],
+    :global(.js-reveal) [data-anim="slide-x"] {
+      opacity: 0;
+    }
+    :global(.js-reveal) [data-anim="write"] {
+      opacity: 0.15;
+    }
+    :global(.js-reveal) [data-anim="write"]:has(span) {
+      opacity: 1;
+    }
+    :global(.js-reveal) [data-anim="write"] span {
+      opacity: 0.15;
+    }
+  }
+
+  .project-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    min-height: auto;
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+    position: relative;
+    border-bottom: 1px solid rgba(241, 233, 221, 0.04);
+  }
+
+  .project-entry:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .video-col {
+    width: 100%;
+    z-index: 5;
+  }
+
+  .meta-col {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .meta-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .index-num {
+    position: absolute;
+    top: -3.5rem;
+    left: -1rem;
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 14vw, 11rem);
+    line-height: 0.8;
+    color: rgba(241, 233, 221, 0.035);
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .meta-top {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sep {
+    color: var(--color-dim);
+  }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 6rem);
+    line-height: 0.9;
+    color: var(--color-cream);
+    text-transform: uppercase;
+    margin: 0 0 1.5rem 0;
+    letter-spacing: 0.005em;
+  }
+
+  .project-desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin: 0 0 2rem 0;
+    max-width: 460px;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--color-muted-2);
+    padding: 5px 12px;
+    border: 1px solid rgba(241, 233, 221, 0.08);
+    background-color: var(--color-surface-2);
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 1024px) {
+    .project-entry {
+      flex-direction: row;
+      justify-content: space-between;
+      min-height: 85vh;
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+      gap: 0;
+      border-bottom: none;
+    }
+
+    .video-col {
+      width: 60%;
+    }
+
+    .meta-col {
+      width: 34%;
+    }
+
+    /* Asymmetric offsets: align-self changes the vertical alignment of columns */
+    .project-entry.even {
+      align-items: flex-start;
+    }
+    .project-entry.even .meta-col {
+      align-self: flex-start;
+      margin-top: 4rem;
+    }
+
+    .project-entry.odd {
+      align-items: flex-end;
+    }
+    .project-entry.odd .meta-col {
+      align-self: flex-end;
+      margin-bottom: 4rem;
+    }
+
+    /* Direction alternation */
+    .project-entry.odd .video-col {
+      order: 2;
+    }
+    .project-entry.odd .meta-col {
+      order: 1;
+    }
+
+    .index-num {
+      top: -6rem;
+      left: -3rem;
+      font-size: clamp(8rem, 18vw, 18rem);
+    }
+
+    .project-entry.odd .index-num {
+      left: auto;
+      right: -3rem;
+    }
+  }
+</style>
