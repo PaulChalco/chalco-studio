@@ -1,0 +1,127 @@
+---
+import ProjectEntry from "./ProjectEntry.astro";
+
+interface Props {
+  procesos: Array<{
+    id: string;
+    data: {
+      title: string;
+      year: number;
+      category: string;
+      tags: string[];
+      description: string;
+      vimeoId: string;
+      vimeoHash?: string;
+      thumbnail: string;
+      featured?: boolean;
+      status?: "live" | "in-progress" | "planned";
+    };
+  }>;
+}
+
+const { procesos } = Astro.props;
+---
+
+<section class="zone-proceso-section" id="proceso-section">
+  <div class="proceso-track" id="proceso-track">
+    {
+      procesos.map((project, idx) => (
+        <ProjectEntry
+          slug={project.id}
+          title={project.data.title}
+          year={project.data.year}
+          category={project.data.category}
+          tags={project.data.tags}
+          description={project.data.description}
+          vimeoId={project.data.vimeoId}
+          vimeoHash={project.data.vimeoHash}
+          thumbnail={project.data.thumbnail}
+          featured={project.data.featured}
+          status={project.data.status}
+          index={idx}
+          horizontal={true}
+        />
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  function initHorizontalProceso() {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
+
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      const track = document.getElementById("proceso-track");
+      const section = document.getElementById("proceso-section");
+
+      if (track && section) {
+        const getScrollAmount = () => {
+          return -(track.scrollWidth - section.offsetWidth);
+        };
+
+        gsap.to(track, {
+          x: () => getScrollAmount(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () => `+=${Math.abs(getScrollAmount())}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Asegurar recalcular tras renderizado inicial de Vimeo/Layout
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 300);
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", () => initHorizontalProceso());
+  if (document.readyState === "complete") {
+    initHorizontalProceso();
+  } else {
+    window.addEventListener("load", () => initHorizontalProceso(), { once: true });
+  }
+</script>
+
+<style>
+  .zone-proceso-section {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .proceso-track {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    padding: 3rem 0;
+  }
+
+  @media (min-width: 768px) {
+    .zone-proceso-section {
+      height: 100vh;
+    }
+
+    .proceso-track {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0;
+      padding: 0;
+      will-change: transform;
+      height: 100vh;
+      align-items: center;
+    }
+  }
+</style>

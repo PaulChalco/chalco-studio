@@ -1,32 +1,31 @@
 ---
 import { getCollection } from "astro:content";
 import Section from "./Section.astro";
-import ProjectEntry from "./ProjectEntry.astro";
 import Reveal from "./Reveal.astro";
 import ZoneDivider from "./ZoneDivider.astro";
 import ZoneShowreels from "./ZoneShowreels.astro";
+import ZoneProceso from "./ZoneProceso.astro";
+import ZonePipeline from "./ZonePipeline.astro";
 
 const allProjects = await getCollection("projects");
 const sortedProjects = allProjects.sort((a, b) => b.data.year - a.data.year);
 
 const showreels = sortedProjects
-  .filter(p => p.data.category === "Showreel")
+  .filter((p) => p.data.category === "Showreel")
   .sort((a, b) => {
     // ShowReel Publicidad (vimeoId 1155606625) va primero, Demo Reel Cine (1002577974) va segundo.
     if (a.data.vimeoId === "1155606625") return -1;
     if (b.data.vimeoId === "1155606625") return 1;
     return 0;
   });
-const procesos = sortedProjects.filter(p => p.data.category !== "Showreel");
+const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
 ---
 
 <Section id="proyectos" class="projects-section">
   <!-- Section Title -->
   <div class="section-header">
-    <Reveal>
-      <div class="section-label">// SELECTED_WORKS</div>
-      <h2 class="section-title">PROYECTOS</h2>
-    </Reveal>
+    <div class="section-label" data-anim="slide-x" data-from="left">//SELECTED_WORKS</div>
+    <h2 class="section-title" data-anim="slide-x" data-from="left">PROYECTOS</h2>
   </div>
 
   <!-- ZONE 1: SHOWREELS -->
@@ -38,28 +37,13 @@ const procesos = sortedProjects.filter(p => p.data.category !== "Showreel");
       label="PROCESO"
       description="Cómo trabajo — simulación, procedural y render"
     />
-    {procesos.length > 0 ? (
-      <div class="projects-list">
-        {procesos.map((project, idx) => (
-          <ProjectEntry
-            slug={project.id}
-            title={project.data.title}
-            year={project.data.year}
-            category={project.data.category}
-            tags={project.data.tags}
-            description={project.data.description}
-            vimeoId={project.data.vimeoId}
-            vimeoHash={project.data.vimeoHash}
-            thumbnail={project.data.thumbnail}
-            featured={project.data.featured}
-            status={project.data.status}
-            index={idx}
-          />
-        ))}
-      </div>
-    ) : (
-      <div class="coming-soon">// No projects available</div>
-    )}
+    {
+      procesos.length > 0 ? (
+        <ZoneProceso procesos={procesos} />
+      ) : (
+        <div class="coming-soon">// No projects available</div>
+      )
+    }
   </div>
 
   <!-- ZONE 3: PIPELINE / IA -->
@@ -68,9 +52,7 @@ const procesos = sortedProjects.filter(p => p.data.category !== "Showreel");
       label="PIPELINE / IA"
       description="Hacia dónde voy — automatización y flujos con IA"
     />
-    <div class="coming-soon">
-      <p>// Próximamente</p>
-    </div>
+    <ZonePipeline />
   </div>
 </Section>
 
