@@ -1,0 +1,983 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Lab · Scroll Transitions · Chalco Studio"
+  description="Banco de pruebas de transiciones scroll-driven para Chalco Studio."
+>
+  <main class="lab-main">
+    <!-- ════════════════════════════════════════════
+         LAB INTRO
+    ════════════════════════════════════════════ -->
+    <div class="lab-intro">
+      <span class="lab-tag">CH.LAB / SCROLL TRANSITIONS</span>
+      <h1 class="lab-title">LABORATORIO</h1>
+      <p class="lab-desc">Cinco técnicas de transición scroll-driven aisladas para comparar.</p>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         TEST 01 — HORIZONTAL SCROLL
+         Técnica: pin + translateX con scrub
+    ════════════════════════════════════════════ -->
+    <div class="test-divider">
+      <span class="divider-line"></span>
+      <span class="divider-label">TEST 01 — HORIZONTAL SCROLL</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <section class="block-hsroll" id="block-hscroll">
+      <div class="hscroll-track" id="hscroll-track">
+        <div class="hscroll-panel">
+          <div class="panel-inner">
+            <div class="panel-num">01</div>
+            <h3 class="panel-label">// PRIMER PANEL</h3>
+            <div class="panel-placeholder">
+              <span class="ph-label">16:9 — PANEL A</span>
+            </div>
+          </div>
+        </div>
+        <div class="hscroll-panel">
+          <div class="panel-inner">
+            <div class="panel-num">02</div>
+            <h3 class="panel-label">// SEGUNDO PANEL</h3>
+            <div class="panel-placeholder">
+              <span class="ph-label">16:9 — PANEL B</span>
+            </div>
+          </div>
+        </div>
+        <div class="hscroll-panel">
+          <div class="panel-inner">
+            <div class="panel-num">03</div>
+            <h3 class="panel-label">// TERCER PANEL</h3>
+            <div class="panel-placeholder">
+              <span class="ph-label">16:9 — PANEL C</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="block-spacer" aria-hidden="true"></div>
+
+    <!-- ════════════════════════════════════════════
+         TEST 02 — PIN + TRANSFORMACIÓN
+         Técnica: pin + scale/blur/opacity con scrub
+    ════════════════════════════════════════════ -->
+    <div class="test-divider">
+      <span class="divider-line"></span>
+      <span class="divider-label">TEST 02 — PIN + TRANSFORMACIÓN</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <section class="block-pin" id="block-pin">
+      <div class="pin-content" id="pin-content">
+        <h3 class="pin-title" id="pin-title">CHALCO STUDIO</h3>
+        <div class="pin-placeholder" id="pin-placeholder">
+          <span class="ph-label">16:9 — VIDEO REVEAL</span>
+        </div>
+        <p class="pin-sub" id="pin-sub">// REEL CINEMATOGRÁFICO 2025</p>
+      </div>
+    </section>
+
+    <div class="block-spacer" aria-hidden="true"></div>
+
+    <!-- ════════════════════════════════════════════
+         TEST 03 — CLIP-PATH REVEAL
+         Técnica: clip-path inset animado con scrub
+    ════════════════════════════════════════════ -->
+    <div class="test-divider">
+      <span class="divider-line"></span>
+      <span class="divider-label">TEST 03 — CLIP-PATH REVEAL</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <section class="block-clip" id="block-clip">
+      <!-- Panel inferior (visible inicialmente) -->
+      <div class="clip-panel-under">
+        <div class="clip-panel-content">
+          <div class="clip-num">A</div>
+          <p class="clip-label">// PANEL INFERIOR — SIEMPRE VISIBLE</p>
+          <div class="clip-placeholder clip-placeholder--under">
+            <span class="ph-label">16:9 — ESCENA BASE</span>
+          </div>
+        </div>
+      </div>
+      <!-- Panel superior (se revela vía clip-path) -->
+      <div class="clip-panel-over" id="clip-panel-over">
+        <div class="clip-panel-content">
+          <div class="clip-num clip-num--alt">B</div>
+          <p class="clip-label">// PANEL SUPERIOR — REVEAL</p>
+          <div class="clip-placeholder clip-placeholder--over">
+            <span class="ph-label">16:9 — ESCENA REVELADA</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="block-spacer" aria-hidden="true"></div>
+
+    <!-- ════════════════════════════════════════════
+         TEST 04 — STACK APILADO
+         Técnica: CSS sticky + ScrollTrigger oscurecimiento
+    ════════════════════════════════════════════ -->
+    <div class="test-divider">
+      <span class="divider-line"></span>
+      <span class="divider-label">TEST 04 — STACK APILADO</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <section class="block-stack" id="block-stack">
+      <div class="stack-card stack-card--1" id="stack-card-1">
+        <div class="stack-card-inner" id="stack-card-inner-1">
+          <div class="stack-card-content">
+            <div class="stack-num">01</div>
+            <h3 class="stack-label">// PRIMER NAIPE</h3>
+            <div class="stack-placeholder">
+              <span class="ph-label">16:9 — CAPA BASE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stack-card stack-card--2" id="stack-card-2">
+        <div class="stack-card-inner" id="stack-card-inner-2">
+          <div class="stack-card-content">
+            <div class="stack-num">02</div>
+            <h3 class="stack-label">// SEGUNDO NAIPE</h3>
+            <div class="stack-placeholder">
+              <span class="ph-label">16:9 — CAPA MEDIA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stack-card stack-card--3" id="stack-card-3">
+        <div class="stack-card-inner" id="stack-card-inner-3">
+          <div class="stack-card-content">
+            <div class="stack-num">03</div>
+            <h3 class="stack-label">// TERCER NAIPE</h3>
+            <div class="stack-placeholder">
+              <span class="ph-label">16:9 — CAPA SUPERIOR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="block-spacer" aria-hidden="true"></div>
+
+    <!-- ════════════════════════════════════════════
+         TEST 05 — ESCALA DE SALIDA (DOLLY-OUT)
+         Técnica: zona vieja retrocede (scale+blur), nueva entra
+    ════════════════════════════════════════════ -->
+    <div class="test-divider">
+      <span class="divider-line"></span>
+      <span class="divider-label">TEST 05 — ESCALA DE SALIDA (DOLLY-OUT)</span>
+      <span class="divider-line"></span>
+    </div>
+
+    <section class="block-dolly" id="block-dolly">
+      <!-- Zona que se aleja -->
+      <div class="dolly-zone-exit" id="dolly-exit">
+        <div class="dolly-zone-content">
+          <div class="dolly-num">OLD</div>
+          <h3 class="dolly-label">// ZONA SALIENTE</h3>
+          <div class="dolly-placeholder">
+            <span class="ph-label">16:9 — ESCENA QUE RETROCEDE</span>
+          </div>
+          <p class="dolly-hint">Esta zona se aleja al scrollear ↓</p>
+        </div>
+      </div>
+      <!-- Zona que entra -->
+      <div class="dolly-zone-enter" id="dolly-enter">
+        <div class="dolly-zone-content">
+          <div class="dolly-num dolly-num--new">NEW</div>
+          <h3 class="dolly-label">// ZONA ENTRANTE</h3>
+          <div class="dolly-placeholder dolly-placeholder--new">
+            <span class="ph-label">16:9 — ESCENA QUE LLEGA</span>
+          </div>
+          <p class="dolly-hint">Esta zona toma el lugar ↑</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spacer final -->
+    <div class="lab-end">
+      <span class="lab-tag">// FIN DEL LABORATORIO</span>
+    </div>
+  </main>
+</Layout>
+
+<!-- ═══════════════════════════════════════════════
+     LAB SCRIPT — Scroll-driven animations
+     Independiente de motion.ts
+═══════════════════════════════════════════════ -->
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  function initLab() {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
+
+    const mm = gsap.matchMedia();
+
+    // ─── DESKTOP ≥768px ───────────────────────────
+    mm.add("(min-width: 768px)", () => {
+      // ── BLOQUE 1: HORIZONTAL SCROLL ──
+      try {
+        const track = document.getElementById("hscroll-track");
+        const section = document.getElementById("block-hscroll");
+        if (track && section) {
+          const panels = track.querySelectorAll(".hscroll-panel");
+          // Distancia total a recorrer = (paneles - 1) * ancho de panel
+          // Calculamos después de que el layout esté listo
+          const getScrollAmount = () => {
+            return -(track.scrollWidth - section.offsetWidth);
+          };
+
+          gsap.to(track, {
+            x: () => getScrollAmount(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              // end dinámico: la sección permanece pinned el equivalente al ancho del track
+              end: () => `+=${Math.abs(getScrollAmount())}`,
+              pin: true,
+              scrub: 1, // ← CALIBRAR: 0.5 = más rápido, 2 = más suave
+              invalidateOnRefresh: true,
+            },
+          });
+        }
+      } catch (e) {
+        console.warn("[Lab] Bloque 1 falló:", e);
+      }
+
+      // ── BLOQUE 2: PIN + TRANSFORMACIÓN ──
+      try {
+        const pinSection = document.getElementById("block-pin");
+        const pinPlaceholder = document.getElementById("pin-placeholder");
+        const pinTitle = document.getElementById("pin-title");
+        const pinSub = document.getElementById("pin-sub");
+
+        if (pinSection && pinPlaceholder && pinTitle && pinSub) {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: pinSection,
+              start: "top top",
+              end: "+=150%", // ← CALIBRAR: controla cuánto scroll dura el pin
+              pin: true,
+              scrub: 1, // ← CALIBRAR: suavizado del scrub
+            },
+          });
+
+          // Keyframe 1: título aparece
+          tl.fromTo(
+            pinTitle,
+            { opacity: 0, filter: "blur(12px)", y: 30 },
+            { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.3 },
+            0
+          );
+
+          // Keyframe 2: placeholder escala
+          tl.fromTo(
+            pinPlaceholder,
+            { scale: 0.6, opacity: 0, borderRadius: "12px" }, // ← CALIBRAR: scale inicial
+            { scale: 1, opacity: 1, borderRadius: "3px", duration: 0.5 },
+            0.15
+          );
+
+          // Keyframe 3: subtítulo aparece al final
+          tl.fromTo(
+            pinSub,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.2 },
+            0.6
+          );
+        }
+      } catch (e) {
+        console.warn("[Lab] Bloque 2 falló:", e);
+      }
+
+      // ── BLOQUE 3: CLIP-PATH REVEAL ──
+      try {
+        const clipSection = document.getElementById("block-clip");
+        const clipOver = document.getElementById("clip-panel-over");
+
+        if (clipSection && clipOver) {
+          gsap.fromTo(
+            clipOver,
+            {
+              clipPath: "inset(100% 0% 0% 0%)", // ← CALIBRAR: dirección del wipe
+              // Alternativas:
+              // Wipe diagonal: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)"
+              // Wipe desde arriba: "inset(0% 0% 100% 0%)"
+              // Wipe circular: "circle(0% at 50% 50%)"
+            },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              ease: "none",
+              scrollTrigger: {
+                trigger: clipSection,
+                start: "top top",
+                end: "+=120%", // ← CALIBRAR: duración del reveal en scroll
+                pin: true,
+                scrub: 1, // ← CALIBRAR
+              },
+            }
+          );
+        }
+      } catch (e) {
+        console.warn("[Lab] Bloque 3 falló:", e);
+      }
+
+      // ── BLOQUE 4: STACK APILADO (CSS sticky + ScrollTrigger solo para oscurecimiento) ──
+      try {
+        // Las cartas usan position:sticky en CSS — sin pins de GSAP.
+        // Solo necesitamos ScrollTrigger para el efecto de oscurecimiento/escala
+        // de las cartas que quedan debajo.
+        const stackCards = document.querySelectorAll(".stack-card");
+        if (stackCards.length > 0) {
+          stackCards.forEach((card, i) => {
+            // Si no es la última carta, oscurecer y reducir al ser cubierta
+            if (i < stackCards.length - 1) {
+              const inner = card.querySelector(".stack-card-inner");
+              if (inner) {
+                gsap.to(inner, {
+                  scale: 0.92,          // ← CALIBRAR: cuánto se encoge la carta cubierta (0.85 = más drama)
+                  opacity: 0.4,         // ← CALIBRAR: cuánto se oscurece (0.2 = más oscuro)
+                  filter: "blur(2px)",  // ← CALIBRAR: blur al quedar cubierta (4px = más)
+                  scrollTrigger: {
+                    trigger: stackCards[i + 1], // se activa cuando la SIGUIENTE carta entra
+                    start: "top bottom",
+                    end: "top 10%",    // ← CALIBRAR: cambiar a "top top" para más largo, "top 30%" para más corto
+                    scrub: 1,          // ← CALIBRAR: suavizado
+                    invalidateOnRefresh: true,
+                  },
+                });
+              }
+            }
+          });
+        }
+      } catch (e) {
+        console.warn("[Lab] Bloque 4 falló:", e);
+      }
+
+      // ── BLOQUE 5: DOLLY-OUT ──
+      try {
+        const dollySection = document.getElementById("block-dolly");
+        const dollyExit = document.getElementById("dolly-exit");
+        const dollyEnter = document.getElementById("dolly-enter");
+
+        if (dollySection && dollyExit && dollyEnter) {
+          // Pin la sección completa
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: dollySection,
+              start: "top top",
+              end: "+=200%",   // ← CALIBRAR: cuánto scroll dura la transición (150% = más rápido, 250% = más lento)
+              pin: true,
+              scrub: 1,        // ← CALIBRAR: suavizado (0.5 = directo, 2 = cinematic)
+              invalidateOnRefresh: true,
+            },
+          });
+
+          // Zona exit retrocede
+          tl.to(
+            dollyExit,
+            {
+              scale: 0.85,           // ← CALIBRAR: escala final (0.7 = retrocede más, 0.9 = más sutil)
+              opacity: 0.3,          // ← CALIBRAR: opacidad final (0.1 = casi invisible, 0.5 = más presente)
+              filter: "blur(6px)",   // ← CALIBRAR: blur final (3px = sutil, 10px = dramático)
+              duration: 0.6,
+            },
+            0
+          );
+
+          // Zona enter sube desde abajo
+          tl.fromTo(
+            dollyEnter,
+            {
+              y: "100%",     // ← empieza fuera de pantalla abajo
+              opacity: 0,
+            },
+            {
+              y: "0%",
+              opacity: 1,
+              duration: 0.6,
+              ease: "power2.out",
+            },
+            0.2  // ← CALIBRAR: offset de inicio (0 = simultáneo, 0.4 = la exit retrocede bastante antes de que entre la nueva)
+          );
+        }
+      } catch (e) {
+        console.warn("[Lab] Bloque 5 falló:", e);
+      }
+    });
+
+    // ─── MOBILE <768px: versión mínima/estática ──
+    mm.add("(max-width: 767px)", () => {
+      // Bloque 1: en móvil los paneles quedan apilados verticalmente, sin pin
+      // Bloque 2: sin pin, el contenido es estático y visible
+      const pinTitle = document.getElementById("pin-title");
+      const pinPlaceholder = document.getElementById("pin-placeholder");
+      const pinSub = document.getElementById("pin-sub");
+      if (pinTitle) gsap.set(pinTitle, { opacity: 1, filter: "blur(0px)", y: 0 });
+      if (pinPlaceholder) gsap.set(pinPlaceholder, { scale: 1, opacity: 1 });
+      if (pinSub) gsap.set(pinSub, { opacity: 1, y: 0 });
+
+      // Bloque 3: sin clip, panel-over visible directamente
+      const clipOver = document.getElementById("clip-panel-over");
+      if (clipOver) gsap.set(clipOver, { clipPath: "inset(0% 0% 0% 0%)" });
+
+      // Bloque 4: stack cards visibles sin efecto
+      document.querySelectorAll(".stack-card-inner").forEach((el) => {
+        gsap.set(el, { scale: 1, opacity: 1, filter: "blur(0px)" });
+      });
+
+      // Bloque 5: ambas zonas visibles sin transformación
+      const dollyExit = document.getElementById("dolly-exit");
+      const dollyEnter = document.getElementById("dolly-enter");
+      if (dollyExit) gsap.set(dollyExit, { scale: 1, opacity: 1, filter: "blur(0px)" });
+      if (dollyEnter) gsap.set(dollyEnter, { y: "0%", opacity: 1 });
+    });
+    // Recalcular todas las posiciones después de inicializar todos los bloques
+    ScrollTrigger.refresh();
+  }
+
+  // Ejecutar después de que initMotion haya conectado Lenis + ScrollTrigger
+  document.addEventListener("astro:page-load", () => initLab());
+  if (document.readyState === "complete") {
+    initLab();
+  } else {
+    window.addEventListener("load", () => initLab(), { once: true });
+  }
+</script>
+
+<style>
+  /* ════════════════════════════════════════════
+     LAB PAGE — Banco de pruebas de scroll
+  ════════════════════════════════════════════ */
+
+  .lab-main {
+    background-color: var(--color-ink);
+    overflow: hidden;
+  }
+
+  /* Espaciador entre bloques — evita solapamiento de pins */
+  .block-spacer {
+    height: 40vh;
+    position: relative;
+    z-index: 0;
+  }
+
+  /* ── INTRO ──────────────────────────────── */
+  .lab-intro {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4rem 2rem 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .lab-intro {
+      padding: 6rem 4rem 8rem;
+    }
+  }
+
+  .lab-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--color-amber);
+    opacity: 0.5;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .lab-title {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.85;
+    color: var(--color-cream);
+    margin: 0 0 1rem;
+  }
+
+  .lab-desc {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    margin: 0;
+    max-width: 480px;
+  }
+
+  /* ── DIVISOR DE TESTS ─────────────────── */
+  .test-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 5rem 2rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .test-divider {
+      padding: 6rem 4rem 4rem;
+    }
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(241, 233, 221, 0.08);
+  }
+
+  .divider-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ════════════════════════════════════════════
+     BLOQUE 1 — HORIZONTAL SCROLL
+  ════════════════════════════════════════════ */
+  .block-hsroll {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hscroll-track {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    padding: 3rem 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .hscroll-track {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0;
+      padding: 0;
+      will-change: transform;
+    }
+  }
+
+  .hscroll-panel {
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .hscroll-panel {
+      width: 80vw;
+      padding: 4rem;
+      min-height: 100vh;
+    }
+  }
+
+  .panel-inner {
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .panel-num {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 0.85;
+    color: var(--color-cream);
+    opacity: 0.12;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .panel-label {
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 1.5vw, 15px);
+    letter-spacing: 0.22em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    margin: 0 0 2rem;
+  }
+
+  .panel-placeholder,
+  .pin-placeholder,
+  .clip-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(
+      135deg,
+      var(--color-surface) 0%,
+      var(--color-surface-2) 100%
+    );
+    border: 1px solid rgba(241, 233, 221, 0.06);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .ph-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--color-dim);
+    text-transform: uppercase;
+  }
+
+  /* ════════════════════════════════════════════
+     BLOQUE 2 — PIN + TRANSFORMACIÓN
+  ════════════════════════════════════════════ */
+  .block-pin {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .block-pin {
+      padding: 4rem;
+    }
+  }
+
+  .pin-content {
+    max-width: 1000px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .pin-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.9;
+    color: var(--color-cream);
+    margin: 0 0 2.5rem;
+    /* Estado inicial para desktop — GSAP lo anima desde aquí */
+    will-change: transform, opacity, filter;
+  }
+
+  .pin-placeholder {
+    will-change: transform, opacity;
+    transform-origin: center center;
+    margin-bottom: 2rem;
+  }
+
+  .pin-sub {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 1.4vw, 14px);
+    letter-spacing: 0.25em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    margin: 0;
+    will-change: transform, opacity;
+  }
+
+  /* ════════════════════════════════════════════
+     BLOQUE 3 — CLIP-PATH REVEAL
+  ════════════════════════════════════════════ */
+  .block-clip {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .clip-panel-under,
+  .clip-panel-over {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .clip-panel-under,
+    .clip-panel-over {
+      padding: 4rem;
+    }
+  }
+
+  .clip-panel-under {
+    background: var(--color-surface);
+  }
+
+  .clip-panel-over {
+    position: absolute;
+    inset: 0;
+    background: var(--color-ink);
+    will-change: clip-path;
+    z-index: 2;
+    /* Estado inicial para desktop — GSAP controla el clip-path */
+  }
+
+  .clip-panel-content {
+    max-width: 900px;
+    width: 100%;
+    text-align: left;
+  }
+
+  .clip-num {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 0.85;
+    color: var(--color-cream);
+    opacity: 0.15;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .clip-num--alt {
+    color: var(--color-amber);
+    opacity: 0.25;
+  }
+
+  .clip-label {
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 1.5vw, 15px);
+    letter-spacing: 0.22em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    margin: 0 0 2rem;
+  }
+
+  .clip-placeholder--under {
+    background: linear-gradient(
+      135deg,
+      var(--color-surface-2) 0%,
+      var(--color-surface) 100%
+    );
+    border-color: rgba(241, 233, 221, 0.04);
+  }
+
+  .clip-placeholder--over {
+    background: linear-gradient(
+      135deg,
+      var(--color-surface) 0%,
+      rgba(245, 158, 11, 0.06) 100%
+    );
+    border-color: rgba(245, 158, 11, 0.12);
+  }
+
+  /* ════════════════════════════════════════════
+     BLOQUE 4 — STACK APILADO
+  ════════════════════════════════════════════ */
+  .block-stack {
+    position: relative;
+  }
+
+  .stack-card {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    position: relative;
+  }
+
+  /* CSS sticky: el apilamiento lo maneja el navegador, no GSAP */
+  @media (min-width: 768px) {
+    .stack-card {
+      padding: 4rem;
+      position: sticky;
+      top: 0;
+    }
+  }
+
+  .stack-card--1 {
+    background: var(--color-surface);
+  }
+
+  .stack-card--2 {
+    background: var(--color-surface-2);
+  }
+
+  .stack-card--3 {
+    background: var(--color-ink);
+  }
+
+  .stack-card-inner {
+    width: 100%;
+    will-change: transform, opacity, filter;
+    transform-origin: center center;
+  }
+
+  .stack-card-content {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .stack-num {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 0.85;
+    color: var(--color-cream);
+    opacity: 0.12;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .stack-label {
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 1.5vw, 15px);
+    letter-spacing: 0.22em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    margin: 0 0 2rem;
+  }
+
+  .stack-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(
+      135deg,
+      var(--color-surface) 0%,
+      var(--color-surface-2) 100%
+    );
+    border: 1px solid rgba(241, 233, 221, 0.06);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ════════════════════════════════════════════
+     BLOQUE 5 — DOLLY-OUT
+  ════════════════════════════════════════════ */
+  .block-dolly {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .dolly-zone-exit,
+  .dolly-zone-enter {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .dolly-zone-exit,
+    .dolly-zone-enter {
+      padding: 4rem;
+    }
+  }
+
+  .dolly-zone-exit {
+    background: var(--color-surface);
+    will-change: transform, opacity, filter;
+    transform-origin: center center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .dolly-zone-enter {
+    background: var(--color-ink);
+    will-change: transform, opacity;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .dolly-zone-content {
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .dolly-num {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 12vw, 10rem);
+    line-height: 0.85;
+    color: var(--color-cream);
+    opacity: 0.12;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .dolly-num--new {
+    color: var(--color-amber);
+    opacity: 0.2;
+  }
+
+  .dolly-label {
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 1.5vw, 15px);
+    letter-spacing: 0.22em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    margin: 0 0 2rem;
+  }
+
+  .dolly-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(
+      135deg,
+      var(--color-surface) 0%,
+      var(--color-surface-2) 100%
+    );
+    border: 1px solid rgba(241, 233, 221, 0.06);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1.5rem;
+  }
+
+  .dolly-placeholder--new {
+    background: linear-gradient(
+      135deg,
+      var(--color-surface) 0%,
+      rgba(245, 158, 11, 0.06) 100%
+    );
+    border-color: rgba(245, 158, 11, 0.1);
+  }
+
+  .dolly-hint {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--color-dim);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── FIN DEL LAB ────────────────────────── */
+  .lab-end {
+    padding: 10rem 2rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .lab-end {
+      padding: 14rem 4rem;
+    }
+  }
+</style>

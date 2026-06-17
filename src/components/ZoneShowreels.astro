@@ -1,0 +1,623 @@
+---
+import VimeoPlayer from "./VimeoPlayer.astro";
+import ZoneDivider from "./ZoneDivider.astro";
+
+interface Props {
+  reels: Array<{
+    id: string;
+    data: {
+      title: string;
+      year: number;
+      category: string;
+      tags: string[];
+      description: string;
+      vimeoId: string;
+      vimeoHash?: string;
+      thumbnail: string;
+      featured?: boolean;
+      status?: "live" | "in-progress" | "planned";
+    };
+  }>;
+}
+
+const { reels } = Astro.props;
+---
+
+<section class="zone-showreels-section">
+  <!-- Separador de entrada centrado tipo lab -->
+  <ZoneDivider label="SHOWREELS" description="LA PRUEBA" />
+
+  <!-- Primer Reel Pinned (solo idx === 0) -->
+  {reels.length > 0 && (() => {
+    const reel = reels[0];
+    return (
+      <section class="pin-reel-section" id="pin-reel-0">
+        <div class="pin-reel-container">
+          <div class="pin-title-wrapper">
+            <!-- Número grande gris sin rotación inicial, atrás a la izquierda -->
+            <div class="pin-index-num" id="pin-num-0">01</div>
+            
+            <!-- Título grande del reel al frente con blur animado -->
+            <h4 class="pin-reel-title" id="pin-title-0">{reel.data.title}</h4>
+          </div>
+          
+          <!-- VimeoPlayer protagónico centrado -->
+          <div class="pin-video-wrapper" id="pin-video-0">
+            <VimeoPlayer
+              vimeoId={reel.data.vimeoId}
+              vimeoHash={reel.data.vimeoHash}
+              thumbnail={reel.data.thumbnail}
+              title={reel.data.title}
+            />
+          </div>
+          
+          <!-- Detalles debajo (meta a la izquierda, descripción a la derecha) -->
+          <div class="pin-reel-info" id="pin-info-0">
+            <div class="pin-info-grid">
+              <div class="reel-meta-top" id="pin-meta-0">
+                <span class="category">{reel.data.category}</span>
+                <span class="sep">·</span>
+                <span class="year">{reel.data.year}</span>
+              </div>
+              <p class="reel-desc" id="pin-desc-0">{reel.data.description}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  })()}
+
+  <!-- Segundo Reel (idx === 1) -->
+  {reels.length > 1 && (() => {
+    const reel = reels[1];
+    return (
+      <section class="pin-reel-section" id="pin-reel-1">
+        <div class="pin-reel-container">
+          <div class="pin-title-wrapper">
+            <!-- Número grande gris sin rotación inicial, atrás a la izquierda -->
+            <div class="pin-index-num" id="pin-num-1">02</div>
+            
+            <!-- Título grande del reel al frente con blur animado -->
+            <h4 class="pin-reel-title" id="pin-title-1">{reel.data.title}</h4>
+          </div>
+          
+          <!-- VimeoPlayer protagónico centrado -->
+          <div class="pin-video-wrapper" id="pin-video-1">
+            <VimeoPlayer
+              vimeoId={reel.data.vimeoId}
+              vimeoHash={reel.data.vimeoHash}
+              thumbnail={reel.data.thumbnail}
+              title={reel.data.title}
+            />
+          </div>
+          
+          <!-- Detalles debajo (meta a la izquierda, descripción a la derecha) -->
+          <div class="pin-reel-info" id="pin-info-1">
+            <div class="pin-info-grid">
+              <div class="reel-meta-top" id="pin-meta-1">
+                <span class="category">{reel.data.category}</span>
+                <span class="sep">·</span>
+                <span class="year">{reel.data.year}</span>
+              </div>
+              <p class="reel-desc" id="pin-desc-1">{reel.data.description}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  })()}
+
+  <!-- Contenedor de Reels Restantes (tercer reel en adelante, si los hay) -->
+  {reels.length > 2 && (
+    <div class="reels-container">
+      {reels.slice(2).map((reel, idx) => {
+        const realIdx = idx + 2;
+        const isEvenReal = realIdx % 2 === 0;
+        const metaFrom = isEvenReal ? "right" : "left";
+        const formattedIndex = String(realIdx + 1).padStart(2, "0");
+        return (
+          <div class="reel-item">
+            <div class="index-num" data-anim="rotate" data-deg="15">
+              {formattedIndex}
+            </div>
+            <!-- VimeoPlayer protagónico centrado con animación scale-in -->
+            <div class="reel-video-wrapper" data-anim="scale-in">
+              <VimeoPlayer
+                vimeoId={reel.data.vimeoId}
+                vimeoHash={reel.data.vimeoHash}
+                thumbnail={reel.data.thumbnail}
+                title={reel.data.title}
+              />
+            </div>
+            
+            <!-- Detalles del reel (título y meta/descripción debajo) -->
+            <div class="reel-info-layout">
+              <div class="reel-meta-top" data-anim="slide-x" data-from={metaFrom}>
+                <span class="category">{reel.data.category}</span>
+                <span class="sep">·</span>
+                <span class="year">{reel.data.year}</span>
+              </div>
+              <div class="reel-details-grid">
+                <h4 class="reel-title" data-anim="dolly">{reel.data.title}</h4>
+                <p class="reel-desc" data-anim="write">{reel.data.description}</p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  )}
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  function initPinReel() {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
+
+    const mm = gsap.matchMedia();
+
+    // ─── DESKTOP ≥768px ───────────────────────────
+    mm.add("(min-width: 768px)", () => {
+      // Función para preparar el efecto de escritura (escribir palabra por palabra)
+      function prepareWriteEffect(el: HTMLElement | null) {
+        if (!el) return [];
+        const text = el.textContent || "";
+        const words = text.trim().split(/\s+/);
+        el.innerHTML = "";
+
+        const spans: HTMLSpanElement[] = [];
+        words.forEach((word, idx) => {
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.style.display = "inline-block";
+          el.appendChild(span);
+          spans.push(span);
+
+          if (idx < words.length - 1) {
+            el.appendChild(document.createTextNode(" "));
+          }
+        });
+        return spans;
+      }
+
+      // --- REEL 1 (Index 0) ---
+      const num0 = document.getElementById("pin-num-0");
+      const title0 = document.getElementById("pin-title-0");
+      const video0 = document.getElementById("pin-video-0");
+      const info0 = document.getElementById("pin-info-0");
+      const meta0 = document.getElementById("pin-meta-0");
+      const desc0 = document.getElementById("pin-desc-0");
+
+      if (num0 && title0 && video0 && info0 && meta0 && desc0) {
+        const descSpans0 = prepareWriteEffect(desc0);
+
+        // Establecer estados iniciales explícitos con gsap.set
+        gsap.set(num0, { opacity: 0, rotation: 0 });
+        gsap.set(title0, { opacity: 0, y: 30, filter: "blur(12px)" });
+        gsap.set(video0, { opacity: 0, scale: 0.6 });
+        gsap.set(info0, { opacity: 0 });
+        gsap.set(meta0, { opacity: 0, x: -50 });
+        if (descSpans0.length > 0) {
+          gsap.set(descSpans0, { opacity: 0.15 });
+        }
+
+        const tl0 = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".zone-showreels-section",
+            start: "top center",
+            end: "top top",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Revelado del número
+        tl0.fromTo(num0, { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0);
+        tl0.fromTo(num0, { rotation: 0 }, { rotation: -15, duration: 1.0, ease: "none" }, 0);
+
+        // Revelado del título
+        tl0.fromTo(
+          title0,
+          { opacity: 0, y: 30, filter: "blur(12px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.25 },
+          0
+        );
+
+        // Revelado del video (escalado)
+        tl0.fromTo(
+          video0,
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5 },
+          0.15
+        );
+
+        // Revelado del bloque de información
+        tl0.to(info0, { opacity: 1, duration: 0.1 }, 0.6);
+
+        // Microanimación: slide-x del meta
+        tl0.fromTo(
+          meta0,
+          { opacity: 0, x: -50 },
+          { opacity: 1, x: 0, duration: 0.25 },
+          0.6
+        );
+
+        // Microanimación: write de la descripción larga
+        if (descSpans0.length > 0) {
+          tl0.to(
+            descSpans0,
+            { opacity: 1, stagger: 0.05, ease: "none", duration: 0.4 },
+            0.6
+          );
+        }
+      }
+
+      // --- REEL 2 (Index 1) ---
+      const num1 = document.getElementById("pin-num-1");
+      const title1 = document.getElementById("pin-title-1");
+      const video1 = document.getElementById("pin-video-1");
+      const info1 = document.getElementById("pin-info-1");
+      const meta1 = document.getElementById("pin-meta-1");
+      const desc1 = document.getElementById("pin-desc-1");
+
+      if (num1 && title1 && video1 && info1 && meta1 && desc1) {
+        const descSpans1 = prepareWriteEffect(desc1);
+
+        // Establecer estados iniciales explícitos con gsap.set
+        gsap.set(num1, { opacity: 0, rotation: 0 });
+        gsap.set(title1, { opacity: 0, y: 30, filter: "blur(12px)" });
+        gsap.set(video1, { opacity: 0, scale: 0.6 });
+        gsap.set(info1, { opacity: 0 });
+        gsap.set(meta1, { opacity: 0, x: 50 }); // Desplazamiento inverso
+        if (descSpans1.length > 0) {
+          gsap.set(descSpans1, { opacity: 0.15 });
+        }
+
+        const tl1 = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#pin-reel-1",
+            start: "top center",
+            end: "top top",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        // Revelado del número
+        tl1.fromTo(num1, { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0);
+        tl1.fromTo(num1, { rotation: 0 }, { rotation: -15, duration: 1.0, ease: "none" }, 0);
+
+        // Revelado del título
+        tl1.fromTo(
+          title1,
+          { opacity: 0, y: 30, filter: "blur(12px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.25 },
+          0
+        );
+
+        // Revelado del video (escalado)
+        tl1.fromTo(
+          video1,
+          { scale: 0.6, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5 },
+          0.15
+        );
+
+        // Revelado del bloque de información
+        tl1.to(info1, { opacity: 1, duration: 0.1 }, 0.6);
+
+        // Microanimación: slide-x del meta (en dirección opuesta para alternancia)
+        tl1.fromTo(
+          meta1,
+          { opacity: 0, x: 50 },
+          { opacity: 1, x: 0, duration: 0.25 },
+          0.6
+        );
+
+        // Microanimación: write de la descripción larga
+        if (descSpans1.length > 0) {
+          tl1.to(
+            descSpans1,
+            { opacity: 1, stagger: 0.05, ease: "none", duration: 0.4 },
+            0.6
+          );
+        }
+      }
+    });
+  }
+
+  // Bind to Astro navigation
+  document.addEventListener("astro:page-load", () => initPinReel());
+  if (document.readyState === "complete") {
+    initPinReel();
+  } else {
+    window.addEventListener("load", () => initPinReel(), { once: true });
+  }
+</script>
+
+<style>
+  /* FOUC avoidance for scroll-driven animations */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js-reveal) [data-anim="dolly"],
+    :global(.js-reveal) [data-anim="slide-x"],
+    :global(.js-reveal) [data-anim="scale-in"] {
+      opacity: 0;
+    }
+    :global(.js-reveal) [data-anim="write"] {
+      opacity: 0.15;
+    }
+    :global(.js-reveal) [data-anim="write"]:has(span) {
+      opacity: 1;
+    }
+    :global(.js-reveal) [data-anim="write"] span {
+      opacity: 0.15;
+    }
+
+    /* Anti-FOUC para reels manuales */
+    @media (min-width: 768px) {
+      :global(.js-reveal) #pin-num-0,
+      :global(.js-reveal) #pin-title-0,
+      :global(.js-reveal) #pin-video-0,
+      :global(.js-reveal) #pin-info-0,
+      :global(.js-reveal) #pin-num-1,
+      :global(.js-reveal) #pin-title-1,
+      :global(.js-reveal) #pin-video-1,
+      :global(.js-reveal) #pin-info-1 {
+        opacity: 0;
+      }
+      :global(.js-reveal) .pin-reel-info .reel-desc span {
+        opacity: 0.15;
+      }
+    }
+  }
+
+  .zone-showreels-section {
+    padding: 0 2rem 10rem 2rem;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  @media (min-width: 1024px) {
+    .zone-showreels-section {
+      padding: 0 4rem 14rem 4rem;
+    }
+  }
+
+  /* Estilos específicos para la sección pinned */
+  .pin-reel-section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 4rem 0;
+  }
+
+  .pin-reel-container {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .pin-title-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .pin-index-num {
+    position: absolute;
+    top: -2.5rem;
+    left: -1rem;
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 14vw, 11rem);
+    line-height: 0.8;
+    color: rgba(241, 233, 221, 0.035);
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .pin-reel-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    color: var(--color-cream);
+    text-transform: uppercase;
+    margin: 0;
+    z-index: 2;
+  }
+
+  .pin-video-wrapper {
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+  }
+
+  .pin-reel-info {
+    width: 100%;
+    margin-top: 1rem;
+    z-index: 2;
+  }
+
+  .pin-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    text-align: left;
+  }
+
+  @media (min-width: 768px) {
+    .pin-reel-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    
+    .pin-reel-container {
+      align-items: center;
+      text-align: center;
+    }
+
+    .pin-title-wrapper {
+      margin-bottom: 1rem;
+    }
+
+    .pin-index-num {
+      left: 25%; /* Posicionamiento atrás a la izquierda del título */
+      top: 45%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(8rem, 14vw, 11rem);
+      color: rgba(241, 233, 221, 0.03);
+    }
+
+    .pin-reel-title {
+      font-size: clamp(3rem, 7vw, 5rem);
+    }
+
+    .pin-video-wrapper {
+      max-width: 1080px; /* Tamaño del clip subido de 850px a 1080px */
+    }
+
+    .pin-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr; /* Meta a la izquierda, descripción a la derecha */
+      gap: 4rem;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .pin-info-grid .reel-meta-top {
+      justify-content: flex-start;
+      margin-bottom: 0;
+    }
+  }
+
+  /* Contenedor de reels apilados con mucho aire */
+  .reels-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    margin-top: 6rem;
+  }
+
+  @media (min-width: 768px) {
+    .reels-container {
+      gap: 14rem;
+      margin-top: 10rem;
+    }
+  }
+
+  /* Reel Item */
+  .reel-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    position: relative;
+  }
+
+  .index-num {
+    position: absolute;
+    top: -2.5rem;
+    left: -1rem;
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 14vw, 11rem);
+    line-height: 0.8;
+    color: rgba(241, 233, 221, 0.035);
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .index-num {
+      top: -4rem;
+      left: -3rem;
+      font-size: clamp(8rem, 18vw, 18rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .reel-item:nth-child(even) .index-num {
+      left: auto;
+      right: -3rem;
+    }
+  }
+
+  .reel-video-wrapper {
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+  }
+
+  .reel-info-layout {
+    width: 100%;
+    margin-top: 1rem;
+    z-index: 2;
+  }
+
+  .reel-meta-top {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sep {
+    color: var(--color-dim);
+  }
+
+  .reel-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .reel-details-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4rem;
+      align-items: flex-start;
+    }
+  }
+
+  .reel-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    color: var(--color-cream);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .reel-desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin: 0;
+  }
+</style>

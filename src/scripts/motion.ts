@@ -25,6 +25,7 @@ function initReveals() {
           trigger: el,
           start: "top 85%",
           toggleActions: "play none none none",
+          invalidateOnRefresh: true,
         },
         opacity: 1,
         y: 0,
@@ -55,6 +56,7 @@ function initAnimations() {
             start: "top 80%",
             end: "top 40%",
             scrub: true,
+            invalidateOnRefresh: true,
           },
           scale: 1,
           opacity: 1,
@@ -77,6 +79,7 @@ function initAnimations() {
             start: "top 85%",
             end: "top 55%",
             scrub: true,
+            invalidateOnRefresh: true,
           },
           x: 0,
           opacity: 1,
@@ -97,9 +100,30 @@ function initAnimations() {
             start: "top bottom",
             end: "bottom top",
             scrub: true,
+            invalidateOnRefresh: true,
           },
           rotation: deg,
           ease: "none",
+        }
+      );
+    } else if (animType === "scale-in") {
+      gsap.fromTo(
+        el,
+        {
+          scale: 0.85,
+          opacity: 0,
+        },
+        {
+          scrollTrigger: {
+            trigger: el,
+            start: "top 95%",
+            end: "top 60%",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+          scale: 1,
+          opacity: 1,
+          ease: "power1.out",
         }
       );
     } else if (animType === "write") {
@@ -132,6 +156,7 @@ function initAnimations() {
               start: "top 80%",
               end: "bottom 60%",
               scrub: true,
+              invalidateOnRefresh: true,
             },
             opacity: 1,
             stagger: 0.1,

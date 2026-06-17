@@ -1,0 +1,48 @@
+---
+interface Props {
+  label: string;
+  description?: string;
+}
+
+const { label, description } = Astro.props;
+---
+
+<div class="technical-divider">
+  <span class="divider-line"></span>
+  <span class="divider-label">// {label}{description ? ` — ${description}` : ""}</span>
+  <span class="divider-line"></span>
+</div>
+
+<style>
+  .technical-divider {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 5rem 0 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .technical-divider {
+      padding: 6rem 0 4rem;
+    }
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(241, 233, 221, 0.08);
+  }
+
+  .divider-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--color-amber);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+</style>

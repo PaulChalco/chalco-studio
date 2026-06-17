@@ -3,11 +3,20 @@ import { getCollection } from "astro:content";
 import Section from "./Section.astro";
 import ProjectEntry from "./ProjectEntry.astro";
 import Reveal from "./Reveal.astro";
+import ZoneDivider from "./ZoneDivider.astro";
+import ZoneShowreels from "./ZoneShowreels.astro";
 
 const allProjects = await getCollection("projects");
 const sortedProjects = allProjects.sort((a, b) => b.data.year - a.data.year);
 
-const showreels = sortedProjects.filter(p => p.data.category === "Showreel");
+const showreels = sortedProjects
+  .filter(p => p.data.category === "Showreel")
+  .sort((a, b) => {
+    // ShowReel Publicidad (vimeoId 1155606625) va primero, Demo Reel Cine (1002577974) va segundo.
+    if (a.data.vimeoId === "1155606625") return -1;
+    if (b.data.vimeoId === "1155606625") return 1;
+    return 0;
+  });
 const procesos = sortedProjects.filter(p => p.data.category !== "Showreel");
 ---
 
@@ -21,62 +30,48 @@ const procesos = sortedProjects.filter(p => p.data.category !== "Showreel");
   </div>
 
   <!-- ZONE 1: SHOWREELS -->
-  {showreels.length > 0 && (
-    <div class="projects-zone">
-      <Reveal>
-        <h3 class="zone-header">// 01_SHOWREELS</h3>
-      </Reveal>
-      <div class="projects-list">
-        {showreels.map((project, idx) => (
-          <Reveal delay={idx * 0.1}>
-            <ProjectEntry
-              slug={project.id}
-              title={project.data.title}
-              year={project.data.year}
-              category={project.data.category}
-              tags={project.data.tags}
-              description={project.data.description}
-              vimeoId={project.data.vimeoId}
-              vimeoHash={project.data.vimeoHash}
-              thumbnail={project.data.thumbnail}
-              featured={project.data.featured}
-              status={project.data.status}
-              index={idx}
-            />
-          </Reveal>
-        ))}
-      </div>
-    </div>
-  )}
+  <ZoneShowreels reels={showreels} />
 
   <!-- ZONE 2: PROCESO -->
-  {procesos.length > 0 && (
-    <div class="projects-zone">
-      <Reveal>
-        <h3 class="zone-header">// 02_PROCESO</h3>
-      </Reveal>
+  <div class="projects-zone">
+    <ZoneDivider
+      label="PROCESO"
+      description="Cómo trabajo — simulación, procedural y render"
+    />
+    {procesos.length > 0 ? (
       <div class="projects-list">
         {procesos.map((project, idx) => (
-          <Reveal delay={idx * 0.1}>
-            <ProjectEntry
-              slug={project.id}
-              title={project.data.title}
-              year={project.data.year}
-              category={project.data.category}
-              tags={project.data.tags}
-              description={project.data.description}
-              vimeoId={project.data.vimeoId}
-              vimeoHash={project.data.vimeoHash}
-              thumbnail={project.data.thumbnail}
-              featured={project.data.featured}
-              status={project.data.status}
-              index={idx}
-            />
-          </Reveal>
+          <ProjectEntry
+            slug={project.id}
+            title={project.data.title}
+            year={project.data.year}
+            category={project.data.category}
+            tags={project.data.tags}
+            description={project.data.description}
+            vimeoId={project.data.vimeoId}
+            vimeoHash={project.data.vimeoHash}
+            thumbnail={project.data.thumbnail}
+            featured={project.data.featured}
+            status={project.data.status}
+            index={idx}
+          />
         ))}
       </div>
+    ) : (
+      <div class="coming-soon">// No projects available</div>
+    )}
+  </div>
+
+  <!-- ZONE 3: PIPELINE / IA -->
+  <div class="projects-zone">
+    <ZoneDivider
+      label="PIPELINE / IA"
+      description="Hacia dónde voy — automatización y flujos con IA"
+    />
+    <div class="coming-soon">
+      <p>// Próximamente</p>
     </div>
-  )}
+  </div>
 </Section>
 
 <style>
@@ -116,19 +111,22 @@ const procesos = sortedProjects.filter(p => p.data.category !== "Showreel");
     margin-bottom: 0;
   }
 
-  .zone-header {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    letter-spacing: 0.18em;
-    color: var(--color-muted-2);
-    border-bottom: 1px solid rgba(241, 233, 221, 0.08);
-    padding-bottom: 0.75rem;
-    margin-bottom: 3.5rem;
-    text-transform: uppercase;
-  }
-
   .projects-list {
     display: flex;
     flex-direction: column;
+  }
+
+  .coming-soon {
+    padding: 3rem 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--color-muted-2);
+    text-transform: uppercase;
+    border-top: 1px dashed rgba(241, 233, 221, 0.08);
+  }
+
+  .coming-soon p {
+    margin: 0;
   }
 </style>
