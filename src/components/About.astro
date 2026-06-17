@@ -1,0 +1,238 @@
+---
+import Section from "./Section.astro";
+import Reveal from "./Reveal.astro";
+---
+
+<Section id="about" class="about-section">
+  <div class="about-header-grid">
+    <div class="about-title-wrapper">
+      <div class="about-label" data-anim="slide-x" data-from="left">// SOBRE EL ARTISTA</div>
+      <h2 class="about-title" data-anim="slide-x" data-from="left">
+        DONDE LA SIMULACIÓN<br />
+        SE ENCUENTRA CON<br />
+        EL <span class="highlight-amber">CÓDIGO</span>
+      </h2>
+    </div>
+    <div class="about-bio-wrapper">
+      <p class="about-paragraph about-bio-text">
+        Trabajo en la intersección de lo artístico y lo técnico: construyo el puente entre la visión cinematográfica y los sistemas que la hacen posible. Sistema procedural, compositing y AI — Houdini, Nuke, Linux, HF — donde la técnica se vuelve narrativa.
+      </p>
+      <p class="about-paragraph about-bio-text">
+        Hoy llevo ese pensamiento procedural hacia la IA: Python para automatizar pipelines, ComfyUI y modelos generativos para reinventar el render, y un camino trazado hacia la Physical AI. No como desarrollador, sino como creative technologist. Automatización que le devuelve el tiempo a la parte creativa — un camino que estoy construyendo, no uno que ya recorrí.
+      </p>
+    </div>
+  </div>
+
+  <div class="about-stats-container">
+    <Reveal delay={0}>
+      <div class="stat-item">
+        <div class="stat-value text-amber">VFX &rarr; AI</div>
+        <div class="stat-label">TRANSICIÓN ACTUAL</div>
+      </div>
+    </Reveal>
+    
+    <Reveal delay={0.1}>
+      <div class="stat-item">
+        <div class="stat-value text-cream">PROCEDURAL</div>
+        <div class="stat-label">FIRMA TÉCNICA</div>
+      </div>
+    </Reveal>
+    
+    <Reveal delay={0.2}>
+      <div class="stat-item">
+        <div class="stat-value text-cyan">CREATIVE TECH</div>
+        <div class="stat-label">ENFOQUE</div>
+      </div>
+    </Reveal>
+  </div>
+</Section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  function initAboutWrite() {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
+
+    const paragraphs = document.querySelectorAll(".about-bio-text");
+    if (paragraphs.length === 0) return;
+
+    const allSpans: HTMLSpanElement[] = [];
+
+    paragraphs.forEach((p) => {
+      const text = p.textContent || "";
+      const words = text.trim().split(/\s+/);
+      p.innerHTML = "";
+
+      words.forEach((word, idx) => {
+        const span = document.createElement("span");
+        span.textContent = word;
+        span.style.display = "inline-block";
+        p.appendChild(span);
+        allSpans.push(span);
+
+        if (idx < words.length - 1) {
+          p.appendChild(document.createTextNode(" "));
+        }
+      });
+    });
+
+    if (allSpans.length > 0) {
+      gsap.set(allSpans, { opacity: 0.15 });
+
+      gsap.fromTo(
+        allSpans,
+        { opacity: 0.15 },
+        {
+          opacity: 1,
+          stagger: 0.02,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".about-section",
+            start: "top 70%",
+            end: "center center",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+    }
+  }
+
+  // Bind to Astro navigation
+  document.addEventListener("astro:page-load", () => initAboutWrite());
+  if (document.readyState === "complete") {
+    initAboutWrite();
+  } else {
+    window.addEventListener("load", () => initAboutWrite(), { once: true });
+  }
+</script>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js-reveal) .about-bio-text span {
+      opacity: 0.15;
+    }
+  }
+
+  .about-section {
+    background-color: var(--color-ink);
+    border-top: 1px solid rgba(241, 233, 221, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .about-header-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .about-header-grid {
+      grid-template-columns: 1fr 1.1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+  }
+
+  .about-title-wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .about-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    color: var(--color-amber);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .about-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    color: var(--color-cream);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .about-title .highlight-amber {
+    color: var(--color-amber);
+  }
+
+  .about-bio-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+    text-align: left;
+  }
+
+  .about-paragraph {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  .about-stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(241, 233, 221, 0.08);
+    padding-top: 4rem;
+  }
+
+  @media (min-width: 768px) {
+    .about-stats-container {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--color-muted-2);
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .text-amber {
+    color: var(--color-amber);
+  }
+
+  .text-cream {
+    color: var(--color-cream);
+  }
+
+  .text-cyan {
+    color: #22d3ee;
+  }
+</style>
