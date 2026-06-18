@@ -1,0 +1,568 @@
+---
+import Section from "./Section.astro";
+import Reveal from "./Reveal.astro";
+
+const socials = [
+  { num: "01", label: "GITHUB", handle: "@PaulChalco", url: "https://github.com/paulchalco" },
+  { num: "02", label: "LINKEDIN", handle: "/in/paulchalco", url: "https://linkedin.com" },
+  { num: "03", label: "VIMEO", handle: "/paulchalco", url: "https://vimeo.com" },
+  { num: "04", label: "HUGGING FACE", handle: "@chalcodev", url: "https://huggingface.co/chalcodev" },
+];
+---
+
+<Section id="contacto" class="contact-section">
+  <div class="contact-grid">
+    <!-- Left Column: Info & Socials -->
+    <div class="contact-info-col">
+      <div class="info-header" data-anim="slide-x" data-from="left">
+        <div class="section-label">// LET'S_TALK</div>
+        <h2 class="contact-title">
+          HABLEMOS<br /><span class="accent-title">DE TU PROYECTO</span>
+        </h2>
+      </div>
+      <p class="contact-desc" data-anim="write">
+        ¿Tienes una secuencia imposible o un pipeline que automatizar? Disponible para colaboraciones de VFX, dirección técnica y proyectos de IA generativa.
+      </p>
+      
+      <div class="socials-container">
+        {
+          socials.map((s, idx) => (
+            <Reveal delay={idx * 0.1} y={10}>
+              <a href={s.url} target="_blank" rel="noopener noreferrer" class="social-link">
+                <span class="social-num">{s.num}</span>
+                <span class="social-label">{s.label}</span>
+                <span class="social-handle">{s.handle}</span>
+                <span class="social-arrow">↗</span>
+              </a>
+            </Reveal>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Right Column: Form -->
+    <div class="contact-form-col">
+      <div class="form-wrapper">
+        <div class="form-corner-accent"></div>
+        <div class="form-header">
+          <span class="form-filename">NEW_MESSAGE.txt</span>
+        </div>
+
+        <form
+          name="contacto"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          class="contact-form"
+          id="contact-form"
+        >
+          <!-- Netlify configuration fields -->
+          <input type="hidden" name="form-name" value="contacto" />
+          <p class="hidden-honeypot" hidden>
+            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+          </p>
+
+          <!-- Success state message (Hidden by default, shown by JS on success) -->
+          <div class="form-success-message" id="form-success">
+            <div class="success-icon">✓</div>
+            <h3 class="success-title">¡MENSAJE ENVIADO!</h3>
+            <p class="success-desc">Gracias por ponerte en contacto. Responderé a la brevedad posible.</p>
+          </div>
+
+          <div class="form-fields-container" id="form-fields">
+            <!-- Name -->
+            <Reveal delay={0.1} y={15}>
+              <div class="form-group">
+                <label for="nombre" class="form-label">01. NOMBRE / RAZÓN SOCIAL</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  id="nombre"
+                  required
+                  placeholder="Introduce tu nombre"
+                  class="form-input"
+                />
+                <span class="validation-bar"></span>
+              </div>
+            </Reveal>
+
+            <!-- Email -->
+            <Reveal delay={0.2} y={15}>
+              <div class="form-group">
+                <label for="email" class="form-label">02. CORREO ELECTRÓNICO</label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  required
+                  placeholder="tuemail@dominio.com"
+                  class="form-input"
+                />
+                <span class="validation-bar"></span>
+              </div>
+            </Reveal>
+
+            <!-- Project Type -->
+            <Reveal delay={0.3} y={15}>
+              <div class="form-group">
+                <label for="tipo_proyecto" class="form-label">03. TIPO DE PROYECTO</label>
+                <div class="select-wrapper">
+                  <select name="tipo_proyecto" id="tipo_proyecto" class="form-select">
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="VFX">VFX</option>
+                    <option value="IA / Generativo">IA / Generativo</option>
+                    <option value="Colaboración">Colaboración / Otro</option>
+                  </select>
+                  <span class="select-arrow">▼</span>
+                </div>
+                <span class="validation-bar"></span>
+              </div>
+            </Reveal>
+
+            <!-- Message -->
+            <Reveal delay={0.4} y={15}>
+              <div class="form-group">
+                <label for="mensaje" class="form-label">04. DETALLES DEL PROYECTO</label>
+                <textarea
+                  name="mensaje"
+                  id="mensaje"
+                  required
+                  rows="4"
+                  placeholder="Describe la secuencia, el pipeline o las capacidades requeridas..."
+                  class="form-textarea"
+                ></textarea>
+                <span class="validation-bar"></span>
+              </div>
+            </Reveal>
+
+            <!-- Submit Button -->
+            <Reveal delay={0.5} y={10}>
+              <button type="submit" class="submit-btn">
+                ENVIAR MENSAJE <span class="arrow">→</span>
+              </button>
+            </Reveal>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    const formFields = document.getElementById("form-fields");
+    const successMsg = document.getElementById("form-success");
+
+    if (!form) return;
+
+    // Field visual validations (amber border on content, orange on error)
+    const inputs = form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input, select, textarea");
+    
+    inputs.forEach((input) => {
+      // Validate on load / dynamic changes
+      const validateInput = () => {
+        const group = input.closest(".form-group");
+        if (!group) return;
+
+        // Check content
+        if (input.value.trim() !== "") {
+          group.classList.add("has-content");
+        } else {
+          group.classList.remove("has-content");
+        }
+
+        // Check validity
+        if (input.checkValidity() || input.value === "") {
+          group.classList.remove("has-error");
+        } else {
+          group.classList.add("has-error");
+        }
+      };
+
+      input.addEventListener("input", validateInput);
+      input.addEventListener("blur", () => {
+        const group = input.closest(".form-group");
+        if (group && !input.checkValidity()) {
+          group.classList.add("has-error");
+        }
+        validateInput();
+      });
+      input.addEventListener("change", validateInput);
+    });
+
+    // Netlify Forms submit handling for single-page experience (optional check/fallback)
+    form.addEventListener("submit", (e) => {
+      const isInvalid = Array.from(inputs).some((input) => {
+        const isValid = input.checkValidity();
+        const group = input.closest(".form-group");
+        if (!isValid && group) {
+          group.classList.add("has-error");
+        }
+        return !isValid;
+      });
+
+      if (isInvalid) {
+        e.preventDefault();
+        return;
+      }
+
+      // If AJAX submit is preferred for dynamic state (Astro static SPA approach)
+      e.preventDefault();
+      const formData = new FormData(form);
+      
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
+      })
+        .then(() => {
+          if (formFields) formFields.style.display = "none";
+          if (successMsg) successMsg.classList.add("active");
+        })
+        .catch((error) => {
+          console.error("Netlify form submission error:", error);
+          // Fallback to native submission in case of network issues
+          form.submit();
+        });
+    });
+  }
+
+  document.addEventListener("astro:page-load", () => initContactForm());
+  if (document.readyState === "complete") {
+    initContactForm();
+  } else {
+    window.addEventListener("load", () => initContactForm(), { once: true });
+  }
+</script>
+
+<style>
+  .contact-section {
+    background-color: var(--color-ink);
+    border-top: 1px solid rgba(241, 233, 221, 0.04);
+    overflow: hidden;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 72px;
+    }
+  }
+
+  /* Info Column */
+  .contact-info-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    color: var(--color-amber);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .contact-title {
+    margin: 0 0 28px;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.2rem, 7vw, 6.8rem);
+    line-height: 0.9;
+    color: var(--color-cream);
+  }
+
+  .accent-title {
+    color: var(--color-amber);
+  }
+
+  .contact-desc {
+    max-width: 440px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-muted);
+    margin: 0 0 36px;
+  }
+
+  /* Social Links */
+  .socials-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--color-muted-2);
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(241, 233, 221, 0.03);
+  }
+
+  .social-num {
+    color: rgba(241, 233, 221, 0.3);
+    min-width: 26px;
+  }
+
+  .social-label {
+    min-width: 120px;
+  }
+
+  .social-handle {
+    color: rgba(241, 233, 221, 0.25);
+  }
+
+  .social-arrow {
+    margin-left: auto;
+    transition: transform 0.2s ease;
+  }
+
+  .social-link:hover {
+    color: var(--color-amber);
+    transform: translateX(4px);
+  }
+
+  .social-link:hover .social-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  /* Form Column */
+  .contact-form-col {
+    position: relative;
+    width: 100%;
+  }
+
+  .form-wrapper {
+    position: relative;
+    background: #0e0d0c;
+    border: 1px solid rgba(241, 233, 221, 0.08);
+    padding: 38px 34px;
+  }
+
+  .form-corner-accent {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    width: 24px;
+    height: 24px;
+    border-right: 2px solid var(--color-amber);
+    border-top: 2px solid var(--color-amber);
+  }
+
+  .form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+
+  .form-filename {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: rgba(241, 233, 221, 0.35);
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Success Message */
+  .form-success-message {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 0;
+  }
+
+  .form-success-message.active {
+    display: flex;
+  }
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--color-amber);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .success-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--color-cream);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .success-desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-muted);
+    max-width: 300px;
+  }
+
+  /* Form Fields Group */
+  .form-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  .form-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: rgba(241, 233, 221, 0.4);
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    background-color: var(--color-surface);
+    border: 1px solid rgba(241, 233, 221, 0.08);
+    padding: 12px 16px;
+    color: var(--color-cream);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    background-color: rgba(241, 233, 221, 0.02);
+  }
+
+  .select-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+  }
+
+  .select-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: rgba(241, 233, 221, 0.3);
+    pointer-events: none;
+  }
+
+  /* Dynamic Validation Bars & Borders */
+  .validation-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-amber);
+    transition: width 0.3s ease;
+  }
+
+  .form-group:focus-within .validation-bar {
+    width: 100%;
+  }
+
+  .form-group.has-content .form-input,
+  .form-group.has-content .form-select,
+  .form-group.has-content .form-textarea {
+    border-color: var(--color-amber);
+  }
+
+  .form-group.has-content .form-label {
+    color: var(--color-amber);
+  }
+
+  /* Error state */
+  .form-group.has-error .form-input,
+  .form-group.has-error .form-select,
+  .form-group.has-error .form-textarea {
+    border-color: #f26411 !important;
+  }
+
+  .form-group.has-error .validation-bar {
+    background-color: #f26411 !important;
+    width: 100% !important;
+  }
+
+  .form-group.has-error .form-label {
+    color: #f26411 !important;
+  }
+
+  /* Submit Button */
+  .submit-btn {
+    width: 100%;
+    background-color: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: var(--color-amber);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    padding: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+  }
+
+  .submit-btn:hover {
+    background-color: rgba(245, 158, 11, 0.2);
+    border-color: var(--color-amber);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+  }
+
+  .submit-btn:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .arrow {
+    transition: transform 0.2s ease;
+  }
+</style>
