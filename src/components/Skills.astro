@@ -1,0 +1,635 @@
+---
+import Section from "./Section.astro";
+
+// Nodes definition matching DC mockup and adding Hugging Face & OpenUSD
+const nodes = [
+  {
+    id: "houdini",
+    name: "Houdini",
+    type: "core",
+    x: 30,
+    y: 16,
+    color: "#f59e0b",
+    desc: "Pyro, fluidos y destrucción procedural.",
+  },
+  {
+    id: "nuke",
+    name: "Nuke",
+    type: "core",
+    x: 72,
+    y: 18,
+    color: "#f59e0b",
+    desc: "Compositing nodal, keying y cleanup 2D.",
+  },
+  {
+    id: "comp",
+    name: "Compositing",
+    type: "core",
+    x: 50,
+    y: 36,
+    color: "#f59e0b",
+    desc: "Integración multicapa, grading e integración 3D/2D.",
+  },
+  {
+    id: "vfx",
+    name: "VFX",
+    type: "core",
+    x: 24,
+    y: 48,
+    color: "#f59e0b",
+    desc: "Simulación, FX y dirección técnica de secuencias.",
+  },
+  {
+    id: "genai",
+    name: "IA Generativa",
+    type: "ai",
+    x: 68,
+    y: 52,
+    color: "#3b82f6",
+    desc: "Difusión, video generativo y síntesis visual.",
+  },
+  {
+    id: "comfy",
+    name: "ComfyUI",
+    type: "ai",
+    x: 88,
+    y: 38,
+    color: "#3b82f6",
+    desc: "Pipelines de difusión por nodos y control fino.",
+  },
+  {
+    id: "python",
+    name: "Python",
+    type: "ai",
+    x: 40,
+    y: 70,
+    color: "#3b82f6",
+    desc: "Herramientas propias, automatización y pipeline.",
+  },
+  {
+    id: "linux",
+    name: "Linux",
+    type: "ai",
+    x: 16,
+    y: 80,
+    color: "#3b82f6",
+    desc: "Render farm, entornos headless y scripting.",
+  },
+  {
+    id: "huggingface",
+    name: "Hugging Face",
+    type: "ai",
+    x: 80,
+    y: 64,
+    color: "#3b82f6",
+    desc: "Modelos de IA y hubs de inferencia para flujos de trabajo creativos.",
+  },
+  {
+    id: "openusd",
+    name: "OpenUSD",
+    type: "ai",
+    x: 52,
+    y: 84,
+    color: "#3b82f6",
+    desc: "Intercambio de escenas 3D universales y estructuradas.",
+  },
+  {
+    id: "omni",
+    name: "NVIDIA Omniverse",
+    type: "explore",
+    color: "#a8a29e",
+    x: 72,
+    y: 82,
+    desc: "USD y simulación física colaborativa en tiempo real.",
+    dashed: true,
+  },
+];
+
+const connections = [
+  { from: "vfx", to: "comp" },
+  { from: "vfx", to: "houdini" },
+  { from: "vfx", to: "nuke" },
+  { from: "comp", to: "nuke" },
+  { from: "comp", to: "houdini" },
+  { from: "vfx", to: "genai" },
+  { from: "genai", to: "comfy" },
+  { from: "genai", to: "python" },
+  { from: "python", to: "linux" },
+  { from: "python", to: "nuke" },
+  { from: "vfx", to: "python" },
+  { from: "genai", to: "omni" },
+  { from: "python", to: "omni" },
+  { from: "comp", to: "genai" },
+  { from: "huggingface", to: "genai" },
+  { from: "huggingface", to: "comfy" },
+  { from: "openusd", to: "houdini" },
+  { from: "openusd", to: "omni" },
+  { from: "openusd", to: "vfx" },
+];
+---
+
+<Section id="skills" class="skills-section">
+  <div class="skills-header" data-anim="slide-x" data-from="left">
+    <div>
+      <div class="section-label">// TECH_STACK</div>
+      <h2 class="section-title">CAPACIDADES</h2>
+    </div>
+    <p class="section-desc">
+      Un grafo de disciplinas conectadas. Pasa el cursor sobre cada nodo para
+      trazar sus relaciones en el pipeline.
+    </p>
+  </div>
+
+  <div class="skills-grid-container" data-anim="dolly">
+    <!-- Graph Board -->
+    <div class="graph-board" id="skills-board">
+      <div class="graph-grid-bg"></div>
+      <div class="graph-label">GRAPH_VIEW / PIPELINE.usd</div>
+
+      <!-- Connections SVG (behind chips) -->
+      <svg
+        viewBox="0 0 1000 600"
+        preserveAspectRatio="none"
+        class="graph-lines-svg"
+      >
+        <g>
+          {
+            connections.map((conn) => {
+              const fromNode = nodes.find((n) => n.id === conn.from)!;
+              const toNode = nodes.find((n) => n.id === conn.to)!;
+              return (
+                <line
+                  x1={fromNode.x * 10}
+                  y1={fromNode.y * 6}
+                  x2={toNode.x * 10}
+                  y2={toNode.y * 6}
+                  class:list={["conn-line", { "line-dashed": conn.dashed }]}
+                  data-from={conn.from}
+                  data-to={conn.to}
+                />
+              );
+            })
+          }
+        </g>
+      </svg>
+
+      <!-- HTML Nodes (Chips) -->
+      {
+        nodes.map((node, i) => (
+          <div
+            class="node-wrapper"
+            style={`left: ${node.x}%; top: ${node.y}%;`}
+          >
+            <div
+              class="node-float"
+              style={`animation-delay: ${i * 0.45}s; animation-duration: ${6 + (i % 4)}s;`}
+            >
+              <div
+                class:list={["node-chip", node.type]}
+                data-id={node.id}
+                data-color={node.color}
+                data-desc={node.desc}
+                data-name={node.name}
+              >
+                <span
+                  class="node-dot"
+                  style={`background-color: ${node.dashed ? "transparent" : node.color}; border: ${node.dashed ? "1px solid " + node.color : "none"}`}
+                />
+                {node.name}
+                {node.dashed && <span class="badge-explore">EXPLORANDO</span>}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Inspector Panel -->
+    <div class="readout-panel">
+      <div>
+        <div class="panel-label">NODE_INSPECTOR</div>
+        <div class="panel-title" id="readout-title">STANDBY</div>
+        <div class="panel-divider"></div>
+        <p class="panel-desc" id="readout-desc">
+          Pasa el cursor sobre un nodo del grafo para inspeccionar su rol y
+          conexiones dentro del pipeline.
+        </p>
+      </div>
+      <div class="panel-legend">
+        <div class="legend-item">
+          <span class="legend-dot bg-amber"></span>VFX / CORE
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot bg-blue"></span>IA & TOOLS
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot bg-dashed"></span>EN EXPLORACIÓN
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<script>
+  function initSkillsConstellation() {
+    const nodes = document.querySelectorAll<HTMLElement>(".node-chip");
+    const lines = document.querySelectorAll<SVGLineElement>(".conn-line");
+    const readoutTitle = document.getElementById("readout-title");
+    const readoutDesc = document.getElementById("readout-desc");
+    const connections = [
+      { from: "vfx", to: "comp" },
+      { from: "vfx", to: "houdini" },
+      { from: "vfx", to: "nuke" },
+      { from: "comp", to: "nuke" },
+      { from: "comp", to: "houdini" },
+      { from: "vfx", to: "genai" },
+      { from: "genai", to: "comfy" },
+      { from: "genai", to: "python" },
+      { from: "python", to: "linux" },
+      { from: "python", to: "nuke" },
+      { from: "vfx", to: "python" },
+      { from: "genai", to: "omni" },
+      { from: "python", to: "omni" },
+      { from: "comp", to: "genai" },
+      { from: "huggingface", to: "genai" },
+      { from: "huggingface", to: "comfy" },
+      { from: "openusd", to: "houdini" },
+      { from: "openusd", to: "omni" },
+      { from: "openusd", to: "vfx" },
+    ];
+
+    nodes.forEach((node) => {
+      const id = node.dataset.id;
+      if (!id) return;
+
+      // Find neighbors
+      const neighbors = new Set<string>();
+      connections.forEach((conn) => {
+        if (conn.from === id) neighbors.add(conn.to);
+        if (conn.to === id) neighbors.add(conn.from);
+      });
+
+      node.addEventListener("mouseenter", () => {
+        const accent = node.dataset.color || "#f59e0b";
+        const name = node.dataset.name || "";
+        const desc = node.dataset.desc || "";
+
+        // Update inspector panel
+        if (readoutTitle) {
+          readoutTitle.textContent = name;
+          readoutTitle.style.color = accent;
+        }
+        if (readoutDesc) {
+          readoutDesc.textContent = desc;
+        }
+
+        // Highlight nodes
+        nodes.forEach((otherNode) => {
+          const otherId = otherNode.dataset.id!;
+          if (otherId === id) {
+            otherNode.classList.add("lit");
+            otherNode.classList.remove("dimmed");
+          } else if (neighbors.has(otherId)) {
+            otherNode.classList.add("lit");
+            otherNode.classList.remove("dimmed");
+          } else {
+            otherNode.classList.remove("lit");
+            otherNode.classList.add("dimmed");
+          }
+        });
+
+        // Highlight connection lines
+        lines.forEach((line) => {
+          const from = line.dataset.from;
+          const to = line.dataset.to;
+          if (from === id || to === id) {
+            line.classList.add("highlighted");
+            line.style.stroke = accent;
+          } else {
+            line.classList.remove("highlighted");
+            line.style.stroke = "";
+          }
+        });
+      });
+
+      node.addEventListener("mouseleave", () => {
+        // Reset inspector
+        if (readoutTitle) {
+          readoutTitle.textContent = "STANDBY";
+          readoutTitle.style.color = "#3a362d";
+        }
+        if (readoutDesc) {
+          readoutDesc.textContent =
+            "Pasa el cursor sobre un nodo del grafo para inspeccionar su rol y conexiones dentro del pipeline.";
+        }
+
+        // Reset nodes
+        nodes.forEach((otherNode) => {
+          otherNode.classList.remove("lit", "dimmed");
+        });
+
+        // Reset lines
+        lines.forEach((line) => {
+          line.classList.remove("highlighted");
+          line.style.stroke = "";
+        });
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", () => initSkillsConstellation());
+  if (document.readyState === "complete") {
+    initSkillsConstellation();
+  } else {
+    window.addEventListener("load", () => initSkillsConstellation(), {
+      once: true,
+    });
+  }
+</script>
+
+<style>
+  .skills-section {
+    background-color: var(--color-ink);
+    border-top: 1px solid rgba(241, 233, 221, 0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skills-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    color: var(--color-amber);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    color: var(--color-cream);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .section-desc {
+    max-width: 340px;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .skills-grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  @media (min-width: 1024px) {
+    .skills-grid-container {
+      grid-template-columns: 1fr 280px;
+    }
+  }
+
+  /* Graph Board */
+  .graph-board {
+    position: relative;
+    background: linear-gradient(180deg, #0e0d0c 0%, #0b0a0a 100%);
+    border: 1px solid rgba(241, 233, 221, 0.07);
+    aspect-ratio: 5 / 3;
+    overflow: hidden;
+  }
+
+  .graph-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(241, 233, 221, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(241, 233, 221, 0.015) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .graph-label {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: rgba(241, 233, 221, 0.35);
+  }
+
+  .graph-lines-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Connection lines */
+  .conn-line {
+    stroke: rgba(241, 233, 221, 0.13);
+    stroke-width: 0.7px;
+    transition:
+      stroke 0.3s ease,
+      stroke-width 0.3s ease,
+      stroke-opacity 0.3s ease;
+  }
+
+  .conn-line.line-dashed {
+    stroke-dasharray: 4, 4;
+  }
+
+  .graph-board:has(.node-chip:hover) .conn-line {
+    stroke-opacity: 0.06;
+  }
+
+  .conn-line.highlighted {
+    stroke-width: 1.8px !important;
+    stroke-opacity: 0.85 !important;
+  }
+
+  /* Node wrappers & floating */
+  .node-wrapper {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .node-float {
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .node-float {
+      animation: floaty ease-in-out infinite;
+    }
+  }
+
+  @keyframes floaty {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  /* Node Chips */
+  .node-chip {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 8px 14px;
+    background: rgba(16, 15, 13, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--color-muted-2);
+    border: 1px solid rgba(241, 233, 221, 0.14);
+    transition: all 0.3s ease;
+  }
+
+  .node-chip.explore {
+    border-style: dashed;
+  }
+
+  .node-dot {
+    width: 8px;
+    height: 8px;
+    margin-right: 9px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .badge-explore {
+    margin-left: 8px;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: var(--color-ink);
+    background: var(--color-amber);
+    padding: 2px 5px;
+    font-weight: bold;
+  }
+
+  /* Hover States on Chips */
+  .node-chip:hover {
+    z-index: 5;
+    background: rgba(20, 18, 15, 0.95);
+    transform: scale(1.08);
+  }
+
+  .node-chip.lit {
+    color: var(--color-cream);
+    border-color: var(--node-color);
+    box-shadow: 0 0 26px var(--node-color);
+  }
+
+  .node-chip.lit .node-dot {
+    box-shadow: 0 0 10px var(--node-color);
+  }
+
+  .node-chip.dimmed {
+    opacity: 0.28;
+  }
+
+  /* Readout panel */
+  .readout-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #0e0d0c;
+    border: 1px solid rgba(241, 233, 221, 0.07);
+    padding: 24px;
+    min-height: 250px;
+  }
+
+  .panel-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(241, 233, 221, 0.35);
+    margin-bottom: 18px;
+  }
+
+  .panel-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    line-height: 0.95;
+    color: #3a362d;
+    min-height: 44px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  .panel-divider {
+    height: 1px;
+    background: rgba(241, 233, 221, 0.1);
+    margin: 16px 0;
+  }
+
+  .panel-desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-muted-2);
+    min-height: 66px;
+  }
+
+  .panel-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+  }
+
+  .legend-dot {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+  }
+
+  .legend-dot.bg-amber {
+    background-color: var(--color-amber);
+  }
+
+  .legend-dot.bg-blue {
+    background-color: #3b82f6;
+  }
+
+  .legend-dot.bg-dashed {
+    border: 1px dashed var(--color-amber);
+  }
+</style>
