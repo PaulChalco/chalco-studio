@@ -92,6 +92,13 @@ const metaFrom = horizontal || index % 2 === 0 ? "right" : "left";
     border-bottom: 1px solid rgba(241, 233, 221, 0.04);
   }
 
+  /* Móvil: contiene los números decorativos absolutos para evitar scroll horizontal */
+  @media (max-width: 640px) {
+    .project-entry {
+      overflow: hidden;
+    }
+  }
+
   .project-entry:last-child {
     border-bottom: none;
     padding-bottom: 0;
@@ -126,6 +133,16 @@ const metaFrom = horizontal || index % 2 === 0 ? "right" : "left";
     z-index: 0;
     pointer-events: none;
     user-select: none;
+  }
+
+  /* Móvil: reduce el número decorativo y lo ancla al borde interior
+     para que no desborde el viewport */
+  @media (max-width: 640px) {
+    .index-num {
+      font-size: clamp(4rem, 22vw, 6rem);
+      left: 0;
+      top: -2rem;
+    }
   }
 
   .meta-top {

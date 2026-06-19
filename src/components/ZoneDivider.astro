@@ -42,7 +42,19 @@ const { label, description } = Astro.props;
     letter-spacing: 0.3em;
     color: var(--color-amber);
     text-transform: uppercase;
-    white-space: nowrap;
-    flex-shrink: 0;
+    /* Móvil: permite wrap para que el label no fuerce scroll horizontal */
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  /* En pantallas más anchas el label cabe en una sola línea */
+  @media (min-width: 480px) {
+    .divider-label {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
   }
 </style>

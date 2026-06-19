@@ -22,11 +22,19 @@
 }
 
 @layer base {
+  /* Previene desbordamiento horizontal global en cualquier viewport */
+  html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
   body {
     background-color: var(--color-ink);
     color: var(--color-cream);
     font-family: var(--font-body);
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
   }
 
   ::selection {

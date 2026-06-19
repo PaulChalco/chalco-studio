@@ -1,18 +1,79 @@
 ---
 ---
-<nav class="main-nav">
-  <a href="#welcome" class="logo">
+
+<!-- ============================================================
+  NAV PRINCIPAL — Chalco Labs
+  - Desktop (>640px): logo + links en fila, sin cambios
+  - Móvil  (≤640px): logo + botón hamburguesa + overlay fullscreen
+============================================================ -->
+<nav class="main-nav" id="main-nav">
+
+  <!-- Logo — salta al inicio con scroll suave -->
+  <a href="#hero" class="logo">
     CHALCO<span class="dot">.</span>
   </a>
+
+  <!-- Links de desktop — ocultos en móvil via CSS -->
   <div class="nav-links">
     <a href="#proyectos" data-nav-link>PROYECTOS<span class="nl-bar"></span></a>
-    <a href="#about" data-nav-link>SOBRE<span class="nl-bar"></span></a>
-    <a href="#skills" data-nav-link>STACK<span class="nl-bar"></span></a>
-    <a href="#contacto" data-nav-link>CONTACTO<span class="nl-bar"></span></a>
+    <a href="#about"     data-nav-link>SOBRE<span class="nl-bar"></span></a>
+    <a href="#skills"    data-nav-link>STACK<span class="nl-bar"></span></a>
+    <a href="#contacto"  data-nav-link>CONTACTO<span class="nl-bar"></span></a>
   </div>
+
+  <!-- Botón hamburguesa — visible solo en móvil -->
+  <button
+    class="hamburger"
+    id="hamburger-btn"
+    aria-label="Abrir menú"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+  >
+    <!-- Tres líneas del icono hamburguesa -->
+    <span class="ham-line"></span>
+    <span class="ham-line"></span>
+    <span class="ham-line"></span>
+  </button>
+
 </nav>
 
+<!-- ============================================================
+  OVERLAY MÓVIL — panel fullscreen que cubre toda la pantalla
+  Se activa/desactiva con la clase CSS "open"
+============================================================ -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Menú de navegación">
+
+  <!-- Botón de cierre (X) en la esquina superior derecha -->
+  <button class="mobile-close" id="mobile-close-btn" aria-label="Cerrar menú">
+    <span class="close-line"></span>
+    <span class="close-line"></span>
+  </button>
+
+  <!-- Links del menú móvil — usan los mismos hrefs que el desktop -->
+  <nav class="mobile-nav-links" aria-label="Navegación principal móvil">
+    <a href="#proyectos" class="mobile-link" data-nav-link>
+      <span class="mobile-link-num">01</span>PROYECTOS
+    </a>
+    <a href="#about" class="mobile-link" data-nav-link>
+      <span class="mobile-link-num">02</span>SOBRE
+    </a>
+    <a href="#skills" class="mobile-link" data-nav-link>
+      <span class="mobile-link-num">03</span>STACK
+    </a>
+    <a href="#contacto" class="mobile-link" data-nav-link>
+      <span class="mobile-link-num">04</span>CONTACTO
+    </a>
+  </nav>
+
+  <!-- Decoración inferior del overlay — firma de marca -->
+  <p class="mobile-footer">CHALCO<span class="dot">.</span> LABS</p>
+
+</div>
+
 <style>
+  /* ============================================================
+    NAV BASE — comportamiento fijo y transición al hacer scroll
+  ============================================================ */
   .main-nav {
     position: fixed;
     top: 0;
@@ -27,6 +88,7 @@
     transition: background 0.4s ease, border-color 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease;
   }
 
+  /* Estado después de hacer scroll — vidrio esmerilado */
   .main-nav.scrolled {
     background: rgba(10, 10, 11, 0.72);
     backdrop-filter: blur(16px);
@@ -35,6 +97,9 @@
     padding: 14px 48px;
   }
 
+  /* ============================================================
+    LOGO
+  ============================================================ */
   .logo {
     font-family: var(--font-display);
     font-size: 28px;
@@ -48,6 +113,9 @@
     color: var(--color-amber);
   }
 
+  /* ============================================================
+    LINKS DE DESKTOP — fila horizontal con línea animada al hover
+  ============================================================ */
   .nav-links {
     display: flex;
     align-items: center;
@@ -68,6 +136,7 @@
     color: var(--color-cream);
   }
 
+  /* Línea amber que crece de izquierda a derecha en hover */
   .nl-bar {
     position: absolute;
     left: 0;
@@ -82,27 +151,304 @@
     width: 100%;
   }
 
+  /* ============================================================
+    BOTÓN HAMBURGUESA — visible solo en móvil
+  ============================================================ */
+  .hamburger {
+    display: none; /* Oculto en desktop, revelado vía media query */
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 90; /* Sobre el overlay para poder cerrarlo */
+  }
+
+  /* Tres líneas del icono — segunda más corta para efecto visual */
+  .ham-line {
+    display: block;
+    height: 1.5px;
+    background: var(--color-cream);
+    border-radius: 2px;
+    transition: transform 0.35s ease, opacity 0.35s ease, width 0.35s ease;
+  }
+
+  .ham-line:nth-child(1) { width: 22px; }
+  .ham-line:nth-child(2) { width: 16px; }
+  .ham-line:nth-child(3) { width: 22px; }
+
+  /* Estado activo del hamburguesa (cuando el menú está abierto) */
+  .hamburger[aria-expanded="true"] .ham-line:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+    width: 22px;
+  }
+  .hamburger[aria-expanded="true"] .ham-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .hamburger[aria-expanded="true"] .ham-line:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+    width: 22px;
+  }
+
+  /* ============================================================
+    OVERLAY MÓVIL — fullscreen, z-index máximo
+  ============================================================ */
+  .mobile-menu {
+    /* Posición y capas */
+    position: fixed;
+    inset: 0;
+    z-index: 85; /* Sobre el nav (z-80) pero bajo el botón hamburguesa (z-90) */
+
+    /* Fondo oscuro con blur para coherencia con el tema ink */
+    background: rgba(10, 10, 11, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    /* Layout interno: links centrados verticalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+
+    /* Estado inicial: oculto fuera de pantalla (desde arriba) */
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Estado abierto — se activa al añadir la clase "open" vía JS */
+  .mobile-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  /* ============================================================
+    BOTÓN CERRAR (X) dentro del overlay
+  ============================================================ */
+  .mobile-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* Dos líneas que forman la X */
+  .close-line {
+    position: absolute;
+    width: 20px;
+    height: 1.5px;
+    background: var(--color-muted);
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+
+  .close-line:nth-child(1) { transform: rotate(45deg); }
+  .close-line:nth-child(2) { transform: rotate(-45deg); }
+
+  .mobile-close:hover .close-line {
+    background: var(--color-cream);
+  }
+
+  /* ============================================================
+    LINKS DENTRO DEL OVERLAY — grandes, centrados, con número decorativo
+  ============================================================ */
+  .mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 0 32px;
+  }
+
+  .mobile-link {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-size: clamp(40px, 12vw, 72px);
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    color: var(--color-muted);
+    text-decoration: none;
+    /* Cada link entra con un pequeño desplazamiento (stagger via CSS vars) */
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .mobile-link:hover {
+    color: var(--color-cream);
+    transform: translateX(6px);
+  }
+
+  /* Número decorativo pequeño junto a cada link */
+  .mobile-link-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--color-dim);
+    margin-bottom: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Stagger de entrada — cada link se anima con delay incremental */
+  .mobile-menu.open .mobile-link:nth-child(1) { transition-delay: 0.05s; }
+  .mobile-menu.open .mobile-link:nth-child(2) { transition-delay: 0.10s; }
+  .mobile-menu.open .mobile-link:nth-child(3) { transition-delay: 0.15s; }
+  .mobile-menu.open .mobile-link:nth-child(4) { transition-delay: 0.20s; }
+
+  /* ============================================================
+    FIRMA EN EL FOOTER DEL OVERLAY
+  ============================================================ */
+  .mobile-footer {
+    position: absolute;
+    bottom: 32px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--color-dim);
+  }
+
+  /* ============================================================
+    RESPONSIVE — punto de quiebre entre desktop y móvil
+  ============================================================ */
   @media (max-width: 640px) {
+    /* Ajusta padding del nav en móvil */
     .main-nav {
       padding: 16px 24px;
     }
     .main-nav.scrolled {
       padding: 12px 24px;
     }
+
+    /* Oculta los links de desktop en móvil */
     .nav-links {
-      gap: 16px;
+      display: none;
+    }
+
+    /* Muestra el botón hamburguesa en móvil */
+    .hamburger {
+      display: flex;
+    }
+  }
+
+  /* ============================================================
+    PREFERS-REDUCED-MOTION — deshabilita animaciones del overlay
+    (las transiciones CSS globales ya las cortan, esto es por si acaso)
+  ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu {
+      transition: opacity 0.1s ease;
+      transform: none;
+    }
+    .mobile-menu.open {
+      transform: none;
+    }
+    .mobile-link {
+      transition: color 0.1s;
     }
   }
 </style>
 
 <script>
+  import { getLenis } from '../scripts/motion';
+
+  // ============================================================
+  //  UTILIDAD: altura real del nav para calcular el offset de scroll
+  // ============================================================
+  function getNavHeight(): number {
+    const nav = document.querySelector('.main-nav');
+    return nav ? (nav as HTMLElement).offsetHeight : 80;
+  }
+
+  // ============================================================
+  //  SCROLL SUAVE — usa Lenis si está disponible, sino nativo
+  // ============================================================
+  function scrollToSection(selector: string) {
+    const lenis = getLenis();
+
+    if (lenis) {
+      // Lenis: scroll suave con offset negativo para el nav fijo
+      lenis.scrollTo(selector, {
+        offset: -getNavHeight(),
+        duration: 1.2,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    } else {
+      // Fallback nativo: usado cuando prefers-reduced-motion desactiva Lenis
+      const target = document.querySelector(selector);
+      if (target) {
+        const top =
+          target.getBoundingClientRect().top +
+          window.scrollY -
+          getNavHeight();
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+  }
+
+  // ============================================================
+  //  MENÚ MÓVIL — apertura, cierre y accesibilidad
+  // ============================================================
+  function openMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const btn  = document.getElementById('hamburger-btn');
+    if (!menu || !btn) return;
+
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+
+    // Bloquea el scroll del body mientras el menú está abierto
+    document.body.style.overflow = 'hidden';
+
+    // Mueve el foco al botón de cierre para accesibilidad con teclado
+    const closeBtn = document.getElementById('mobile-close-btn');
+    closeBtn?.focus();
+  }
+
+  function closeMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const btn  = document.getElementById('hamburger-btn');
+    if (!menu || !btn) return;
+
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+
+    // Restaura el scroll del body al cerrar el menú
+    document.body.style.overflow = '';
+
+    // Devuelve el foco al botón hamburguesa
+    btn.focus();
+  }
+
+  // ============================================================
+  //  ESTADO SCROLL — vidrio esmerilado al bajar la página
+  // ============================================================
   function initNavScroll() {
     const nav = document.querySelector('.main-nav');
     if (!nav) return;
 
     const handleScroll = () => {
-      const y = window.scrollY;
-      if (y > 40) {
+      if (window.scrollY > 40) {
         nav.classList.add('scrolled');
       } else {
         nav.classList.remove('scrolled');
@@ -110,11 +456,75 @@
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Initial call in case page is loaded with scroll already
-    handleScroll();
+    handleScroll(); // Aplica estado inmediato si la página ya está scrolleada
   }
 
-  // Initialize on load and page transition
-  initNavScroll();
-  document.addEventListener('astro:page-load', initNavScroll);
+  // ============================================================
+  //  LISTENERS — botones y links; se llama en cada init para
+  //  evitar duplicados se usa el truco de clonar/reemplazar nodos
+  // ============================================================
+  function initNavLinks() {
+    // --- Logo: scroll suave al inicio ---
+    const logo = document.querySelector('.logo');
+    if (logo) {
+      const freshLogo = logo.cloneNode(true) as HTMLElement;
+      logo.parentNode?.replaceChild(freshLogo, logo);
+      freshLogo.addEventListener('click', (e) => {
+        const href = (freshLogo as HTMLAnchorElement).getAttribute('href');
+        if (href?.startsWith('#')) {
+          e.preventDefault();
+          scrollToSection(href);
+        }
+      });
+    }
+
+    // --- Botón hamburguesa: abre el overlay ---
+    const hamburger = document.getElementById('hamburger-btn');
+    if (hamburger) {
+      const freshHam = hamburger.cloneNode(true) as HTMLElement;
+      hamburger.parentNode?.replaceChild(freshHam, hamburger);
+      freshHam.addEventListener('click', openMenu);
+    }
+
+    // --- Botón cerrar (X): cierra el overlay ---
+    const closeBtn = document.getElementById('mobile-close-btn');
+    if (closeBtn) {
+      const freshClose = closeBtn.cloneNode(true) as HTMLElement;
+      closeBtn.parentNode?.replaceChild(freshClose, closeBtn);
+      freshClose.addEventListener('click', closeMenu);
+    }
+
+    // --- Tecla Escape: cierra el overlay desde el teclado ---
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // --- Todos los links [data-nav-link]: scroll suave + cierre de menú ---
+    // Incluye tanto los links de desktop como los del overlay móvil
+    const links = document.querySelectorAll('[data-nav-link]');
+    links.forEach((link) => {
+      const freshLink = link.cloneNode(true) as HTMLElement;
+      link.parentNode?.replaceChild(freshLink, link);
+      freshLink.addEventListener('click', (e) => {
+        const href = (freshLink as HTMLAnchorElement).getAttribute('href');
+        if (!href?.startsWith('#')) return;
+
+        e.preventDefault();
+        closeMenu();          // Cierra el overlay móvil si estaba abierto
+        scrollToSection(href); // Salta suavemente a la sección
+      });
+    });
+  }
+
+  // ============================================================
+  //  INIT — punto de entrada; se llama en carga inicial
+  //  y en cada transición de página de Astro
+  // ============================================================
+  function init() {
+    initNavScroll();
+    initNavLinks();
+  }
+
+  init();
+  document.addEventListener('astro:page-load', init);
 </script>

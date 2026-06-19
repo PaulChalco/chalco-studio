@@ -358,7 +358,8 @@ const { reels } = Astro.props;
       opacity: 0.15;
     }
 
-    /* Anti-FOUC para reels manuales */
+  /* Anti-FOUC para reels manuales — SOLO en desktop donde corre la animación pin.
+     En móvil estos elementos deben ser visibles por defecto (opacity:1). */
     @media (min-width: 768px) {
       :global(.js-reveal) #pin-num-0,
       :global(.js-reveal) #pin-title-0,
@@ -372,6 +373,21 @@ const { reels } = Astro.props;
       }
       :global(.js-reveal) .pin-reel-info .reel-desc span {
         opacity: 0.15;
+      }
+    }
+
+    /* Contrarrestar en móvil cualquier residuo de opacity:0 —
+       garantiza visibilidad aunque js-reveal esté activo */
+    @media (max-width: 767px) {
+      :global(.js-reveal) #pin-num-0,
+      :global(.js-reveal) #pin-title-0,
+      :global(.js-reveal) #pin-video-0,
+      :global(.js-reveal) #pin-info-0,
+      :global(.js-reveal) #pin-num-1,
+      :global(.js-reveal) #pin-title-1,
+      :global(.js-reveal) #pin-video-1,
+      :global(.js-reveal) #pin-info-1 {
+        opacity: 1 !important;
       }
     }
   }
@@ -429,6 +445,15 @@ const { reels } = Astro.props;
     user-select: none;
   }
 
+  /* Móvil: reduce y ancla el número para evitar scroll horizontal */
+  @media (max-width: 640px) {
+    .pin-index-num {
+      font-size: clamp(4rem, 22vw, 6rem);
+      left: 0;
+      top: -2rem;
+    }
+  }
+
   .pin-reel-title {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 5vw, 4.5rem);
@@ -457,6 +482,69 @@ const { reels } = Astro.props;
     gap: 1.25rem;
     width: 100%;
     text-align: left;
+  }
+
+  /* ─── MÓVIL ≤767px: pin-reels visibles como bloques apilados ─── */
+  @media (max-width: 767px) {
+    /* La sección ocupa el ancho completo con padding cómodo */
+    .pin-reel-section {
+      padding: 3rem 0 4rem;
+      min-height: auto;
+      display: block;
+    }
+
+    /* Contenedor apilado con gap estándar */
+    .pin-reel-container {
+      gap: 1.5rem;
+      text-align: left;
+    }
+
+    /* Wrapper del título: alineado a la izquierda, espacio para el número de fondo */
+    .pin-title-wrapper {
+      justify-content: flex-start;
+      padding-top: 2.5rem;
+    }
+
+    /* Título visible con tamaño móvil adecuado */
+    .pin-reel-title {
+      font-size: clamp(2.4rem, 11vw, 3.5rem);
+      opacity: 1 !important;
+      filter: none !important;
+      transform: none !important;
+    }
+
+    /* Video a ancho completo, sin escala ni opacidad forzada */
+    .pin-video-wrapper {
+      width: 100%;
+      max-width: 100%;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    /* Info visible con layout columna */
+    .pin-reel-info {
+      opacity: 1 !important;
+      margin-top: 0.75rem;
+    }
+
+    /* Grid de info en columna (igual que los reels 3+) */
+    .pin-info-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+    }
+
+    /* Meta y descripción visibles */
+    .pin-info-grid .reel-meta-top {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .pin-info-grid .reel-desc,
+    .pin-info-grid .reel-desc span {
+      opacity: 1 !important;
+    }
   }
 
   @media (min-width: 768px) {
@@ -533,6 +621,13 @@ const { reels } = Astro.props;
     position: relative;
   }
 
+  /* Móvil: overflow hidden para contener el número decorativo */
+  @media (max-width: 640px) {
+    .reel-item {
+      overflow: hidden;
+    }
+  }
+
   .index-num {
     position: absolute;
     top: -2.5rem;
@@ -544,6 +639,15 @@ const { reels } = Astro.props;
     z-index: 0;
     pointer-events: none;
     user-select: none;
+  }
+
+  /* Móvil: reduce y ancla el número para evitar scroll horizontal */
+  @media (max-width: 640px) {
+    .index-num {
+      font-size: clamp(4rem, 22vw, 6rem);
+      left: 0;
+      top: -2rem;
+    }
   }
 
   @media (min-width: 768px) {
