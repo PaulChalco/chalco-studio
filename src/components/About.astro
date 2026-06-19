@@ -124,6 +124,14 @@ import Reveal from "./Reveal.astro";
     display: flex;
     flex-direction: column;
     gap: 4rem;
+    /* Reduce el padding-bottom heredado de Section para achicar el hueco About→Proyectos */
+    padding-bottom: 3rem !important;
+  }
+
+  @media (min-width: 768px) {
+    .about-section {
+      padding-bottom: 4rem !important;
+    }
   }
 
   .about-header-grid {

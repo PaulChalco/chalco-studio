@@ -22,7 +22,7 @@ interface Props {
 const { procesos } = Astro.props;
 ---
 
-<section class="zone-proceso-section" id="proceso-section">
+<section class="zone-proceso-section" id="proceso">
   <div class="proceso-track" id="proceso-track">
     {
       procesos.map((project, idx) => (
@@ -60,7 +60,7 @@ const { procesos } = Astro.props;
 
     mm.add("(min-width: 768px)", () => {
       const track = document.getElementById("proceso-track");
-      const section = document.getElementById("proceso-section");
+      const section = document.getElementById("proceso"); // id actualizado para coincidir con el HTML
 
       if (track && section) {
         const getScrollAmount = () => {

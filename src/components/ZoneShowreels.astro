@@ -23,7 +23,7 @@ interface Props {
 const { reels } = Astro.props;
 ---
 
-<section class="zone-showreels-section">
+<section class="zone-showreels-section" id="showreels">
   <!-- Separador de entrada centrado tipo lab -->
   <ZoneDivider label="SHOWREELS" description="LA PRUEBA" />
 
@@ -393,7 +393,7 @@ const { reels } = Astro.props;
   }
 
   .zone-showreels-section {
-    padding: 0 2rem 10rem 2rem;
+    padding: 0 2rem 5rem 2rem;
     position: relative;
     width: 100%;
     overflow: hidden;
@@ -401,7 +401,7 @@ const { reels } = Astro.props;
 
   @media (min-width: 1024px) {
     .zone-showreels-section {
-      padding: 0 4rem 14rem 4rem;
+      padding: 0 4rem 6rem 4rem;
     }
   }
 

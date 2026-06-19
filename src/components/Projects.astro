@@ -22,10 +22,17 @@ const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
 ---
 
 <Section id="proyectos" class="projects-section">
-  <!-- Section Title -->
+  <!-- Encabezado de la sección con etiqueta y título principal -->
   <div class="section-header">
     <div class="section-label" data-anim="slide-x" data-from="left">//SELECTED_WORKS</div>
     <h2 class="section-title" data-anim="slide-x" data-from="left">PROYECTOS</h2>
+  </div>
+
+  <!-- Barra de navegación entre zonas — scroll suave a cada sub-sección -->
+  <div class="zone-nav">
+    <button class="zone-btn" data-zone-target="#showreels">SHOWREELS</button>
+    <button class="zone-btn" data-zone-target="#proceso">PROCESO</button>
+    <button class="zone-btn" data-zone-target="#pipeline">PIPELINE</button>
   </div>
 
   <!-- ZONE 1: SHOWREELS -->
@@ -59,12 +66,13 @@ const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
 <style>
   .projects-section {
     background-color: var(--color-ink);
-    padding-top: 6rem;
+    padding-top: 4rem;
     padding-bottom: 6rem;
   }
 
+  /* Encabezado: título + etiqueta con margen inferior reducido */
   .section-header {
-    margin-bottom: 5rem;
+    margin-bottom: 1.5rem;
   }
 
   .section-label {
@@ -72,7 +80,7 @@ const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
     font-size: 12px;
     letter-spacing: 0.24em;
     color: var(--color-amber);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     text-transform: uppercase;
   }
 
@@ -85,8 +93,57 @@ const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
     letter-spacing: 0.01em;
   }
 
+  /* ─── Barra de navegación por zonas ─── */
+  .zone-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 1.5rem 0 2.5rem;
+    border-top: 1px solid rgba(241, 233, 221, 0.08);
+    border-bottom: 1px solid rgba(241, 233, 221, 0.08);
+    padding: 14px 0;
+    /* Scroll horizontal en móvil si los botones no caben */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .zone-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Botones tipo terminal — estado base */
+  .zone-btn {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--color-muted);
+    background: transparent;
+    border: 1px solid rgba(241, 233, 221, 0.10);
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: color 0.25s, border-color 0.25s, background 0.25s;
+    text-transform: uppercase;
+  }
+
+  .zone-btn:hover {
+    color: var(--color-amber);
+    border-color: rgba(245, 158, 11, 0.45);
+    background: rgba(245, 158, 11, 0.05);
+  }
+
+  /* Estado activo — zona actualmente visible */
+  .zone-btn.active {
+    color: var(--color-ink);
+    background: var(--color-amber);
+    border-color: var(--color-amber);
+  }
+
+  /* ─── Zonas de contenido ─── */
   .projects-zone {
-    margin-bottom: 6rem;
+    margin-bottom: 4rem;
   }
 
   .projects-zone:last-child {
@@ -112,3 +169,75 @@ const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
     margin: 0;
   }
 </style>
+
+<script>
+  import { getLenis } from '../scripts/motion';
+
+  // Altura del nav fijo para calcular el offset de scroll
+  function getNavHeight(): number {
+    const nav = document.querySelector('.main-nav');
+    return nav ? (nav as HTMLElement).offsetHeight : 72;
+  }
+
+  // Scroll suave con Lenis o fallback nativo — misma lógica que Nav.astro
+  function scrollToSection(selector: string) {
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.scrollTo(selector, {
+        offset: -getNavHeight() - 12,
+        duration: 1.2,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    } else {
+      const target = document.querySelector(selector);
+      if (target) {
+        const top =
+          target.getBoundingClientRect().top +
+          window.scrollY -
+          getNavHeight() - 12;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+  }
+
+  // Actualiza el botón activo según qué zona está en viewport
+  function updateActiveBtn() {
+    const btns = document.querySelectorAll('.zone-btn');
+    const targets = ['#showreels', '#proceso', '#pipeline'];
+    const navH = getNavHeight();
+
+    // Encuentra la zona cuyo borde superior está más cercano (y por encima) del centro de pantalla
+    let activeIdx = 0;
+    targets.forEach((sel, i) => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      // Si el borde superior de la zona ya cruzó el punto de referencia (nav + pequeño margen)
+      if (top <= navH + 80) activeIdx = i;
+    });
+
+    btns.forEach((btn, i) => {
+      btn.classList.toggle('active', i === activeIdx);
+    });
+  }
+
+  function initZoneNav() {
+    // Listeners de clic en los botones de zona
+    const btns = document.querySelectorAll('.zone-btn');
+    btns.forEach((btn) => {
+      const freshBtn = btn.cloneNode(true) as HTMLElement;
+      btn.parentNode?.replaceChild(freshBtn, btn);
+      freshBtn.addEventListener('click', () => {
+        const target = freshBtn.getAttribute('data-zone-target');
+        if (target) scrollToSection(target);
+      });
+    });
+
+    // Listener de scroll para resaltar la zona activa
+    window.addEventListener('scroll', updateActiveBtn, { passive: true });
+    updateActiveBtn(); // Estado inicial
+  }
+
+  initZoneNav();
+  document.addEventListener('astro:page-load', initZoneNav);
+</script>

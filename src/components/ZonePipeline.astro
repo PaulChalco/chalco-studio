@@ -1,6 +1,4 @@
 ---
-import Reveal from "./Reveal.astro";
-
 const items = [
   {
     name: "ComfyUI",
@@ -33,27 +31,27 @@ const items = [
 ];
 ---
 
-<div class="zone-pipeline-container">
+<div class="zone-pipeline-container" id="pipeline">
   <div class="pipeline-grid">
     {
-      items.map((item, idx) => (
-        <Reveal delay={idx * 0.15} y={15}>
-          <div class="pipeline-card">
-            <div class="card-header">
-              <span class="card-icon">{item.icon}</span>
-              {item.status === "in-progress" ? (
-                <span class="badge badge-in-progress">EN PROCESO</span>
-              ) : (
-                <span class="badge badge-planned">PRÓXIMAMENTE</span>
-              )}
-            </div>
-            <h3 class="card-title">{item.name}</h3>
-            <p class="card-desc">{item.description}</p>
-            <a href={item.github} target="_blank" rel="noopener noreferrer" class="card-link">
-              VER EN GITHUB <span class="arrow">→</span>
-            </a>
+      items.map((item) => (
+        <!-- data-anim="scale-in" usa el mismo ScrollTrigger que motion.ts
+             registra para los videos de ZoneShowreels — no crea nada nuevo -->
+        <div class="pipeline-card">
+          <div class="card-header">
+            <span class="card-icon">{item.icon}</span>
+            {item.status === "in-progress" ? (
+              <span class="badge badge-in-progress">EN PROCESO</span>
+            ) : (
+              <span class="badge badge-planned">PRÓXIMAMENTE</span>
+            )}
           </div>
-        </Reveal>
+          <h3 class="card-title">{item.name}</h3>
+          <p class="card-desc">{item.description}</p>
+          <a href={item.github} target="_blank" rel="noopener noreferrer" class="card-link">
+            VER EN GITHUB <span class="arrow">→</span>
+          </a>
+        </div>
       ))
     }
   </div>
