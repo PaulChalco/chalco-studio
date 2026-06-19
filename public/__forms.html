@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+  Archivo de detección de formularios para Netlify.
+  Netlify escanea los archivos HTML estáticos en build time para registrar los forms.
+  Como Contact.astro usa JS para el envío, Netlify no puede detectar el form
+  directamente desde el componente. Este archivo replica la estructura del form
+  con los mismos `name` y campos para que Netlify lo registre correctamente.
+  NO es una página visible — solo existe para el parser de Netlify.
+-->
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Netlify Forms — detección</title>
+  </head>
+  <body>
+    <form
+      name="contacto"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="contacto" />
+      <input type="text"   name="nombre" />
+      <input type="email"  name="email" />
+      <select name="tipo_proyecto">
+        <option value="VFX">VFX</option>
+        <option value="IA / Generativo">IA / Generativo</option>
+        <option value="Colaboración">Colaboración / Otro</option>
+      </select>
+      <textarea name="mensaje"></textarea>
+      <input type="text" name="bot-field" />
+      <button type="submit">Enviar</button>
+    </form>
+  </body>
+</html>

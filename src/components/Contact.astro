@@ -207,22 +207,41 @@ const socials = [
         return;
       }
 
-      // If AJAX submit is preferred for dynamic state (Astro static SPA approach)
+      // Envío AJAX para mantener el estado de la página (SPA approach con Astro + Netlify)
       e.preventDefault();
       const formData = new FormData(form);
-      
+
+      // Netlify requiere que form-name esté incluido en el body del POST
+      // para asociar el envío al form registrado en el dashboard.
+      // URLSearchParams serializa correctamente application/x-www-form-urlencoded.
+      const params = new URLSearchParams();
+      formData.forEach((value, key) => {
+        params.append(key, value as string);
+      });
+      // Garantizar que form-name esté presente aunque FormData no lo incluya
+      if (!params.has("form-name")) {
+        params.append("form-name", "contacto");
+      }
+
       fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
+        body: params.toString(),
       })
-        .then(() => {
-          if (formFields) formFields.style.display = "none";
-          if (successMsg) successMsg.classList.add("active");
+        .then((response) => {
+          if (response.ok) {
+            // Solo muestra éxito si Netlify confirmó la recepción (2xx)
+            if (formFields) formFields.style.display = "none";
+            if (successMsg) successMsg.classList.add("active");
+          } else {
+            // Respuesta no-OK: fallback a envío nativo para no perder el mensaje
+            console.warn("Netlify form: respuesta no-OK, enviando nativamente", response.status);
+            form.submit();
+          }
         })
         .catch((error) => {
           console.error("Netlify form submission error:", error);
-          // Fallback to native submission in case of network issues
+          // Sin red: fallback a envío nativo
           form.submit();
         });
     });
