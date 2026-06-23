@@ -10,4 +10,4 @@ featured: false
 status: "live"
 ---
 
-Reconstrucción volumétrica tridimensional automática de la Ciudad de México parseando archivos OSM dentro de Houdini.
+Reconstrucción procedural de un segmento de la Ciudad de México parseando archivos con el sistema OSM dentro de Houdini.

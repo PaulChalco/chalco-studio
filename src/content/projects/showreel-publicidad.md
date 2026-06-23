@@ -1,6 +1,6 @@
 ---
 title: "ShowReel Publicidad"
-year: 2024
+year: 2025
 category: "Showreel"
 tags: ["Davinci Resolve", "Edición", "Color"]
 description: "Selección de trabajos de publicidad comercial."

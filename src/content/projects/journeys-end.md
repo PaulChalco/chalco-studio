@@ -1,6 +1,6 @@
 ---
 title: "Journeys End — UT-Hub"
-year: 2022
+year: 2023
 category: "Unreal Engine"
 tags: ["Unreal Engine", "Davinci"]
 description: "Cinemática de entorno e iluminación en tiempo real desarrollada en Unreal Engine."
