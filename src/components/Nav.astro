@@ -482,20 +482,27 @@
   // ============================================================
   //  ESTADO SCROLL — vidrio esmerilado al bajar la página
   // ============================================================
+  function handleNavScroll() {
+    const nav = document.querySelector(".main-nav");
+    if (!nav) return;
+    if (window.scrollY > 40) {
+      nav.classList.add("scrolled");
+    } else {
+      nav.classList.remove("scrolled");
+    }
+  }
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape") closeMenu();
+  }
+
   function initNavScroll() {
     const nav = document.querySelector(".main-nav");
     if (!nav) return;
 
-    const handleScroll = () => {
-      if (window.scrollY > 40) {
-        nav.classList.add("scrolled");
-      } else {
-        nav.classList.remove("scrolled");
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Aplica estado inmediato si la página ya está scrolleada
+    window.removeEventListener("scroll", handleNavScroll);
+    window.addEventListener("scroll", handleNavScroll, { passive: true });
+    handleNavScroll(); // Aplica estado inmediato si la página ya está scrolleada
   }
 
   // ============================================================
@@ -534,9 +541,8 @@
     }
 
     // --- Tecla Escape: cierra el overlay desde el teclado ---
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
-    });
+    document.removeEventListener("keydown", handleKeydown);
+    document.addEventListener("keydown", handleKeydown);
 
     // --- Todos los links [data-nav-link]: scroll suave + cierre de menú ---
     // Incluye tanto los links de desktop como los del overlay móvil

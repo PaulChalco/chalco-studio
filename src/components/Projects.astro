@@ -221,6 +221,17 @@ const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
     });
   }
 
+  let ticking = false;
+  function handleScroll() {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateActiveBtn();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
   function initZoneNav() {
     // Listeners de clic en los botones de zona
     const btns = document.querySelectorAll('.zone-btn');
@@ -233,8 +244,9 @@ const procesos = sortedProjects.filter((p) => p.data.category !== "Showreel");
       });
     });
 
-    // Listener de scroll para resaltar la zona activa
-    window.addEventListener('scroll', updateActiveBtn, { passive: true });
+    // Listener de scroll throttled para resaltar la zona activa
+    window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     updateActiveBtn(); // Estado inicial
   }
 

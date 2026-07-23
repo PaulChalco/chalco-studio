@@ -105,7 +105,13 @@ const nodes = [
   },
 ];
 
-const connections = [
+interface Connection {
+  from: string;
+  to: string;
+  dashed?: boolean;
+}
+
+const connections: Connection[] = [
   { from: "vfx", to: "comp" },
   { from: "vfx", to: "houdini" },
   { from: "vfx", to: "nuke" },
@@ -236,27 +242,10 @@ const connections = [
     const lines = document.querySelectorAll<SVGLineElement>(".conn-line");
     const readoutTitle = document.getElementById("readout-title");
     const readoutDesc = document.getElementById("readout-desc");
-    const connections = [
-      { from: "vfx", to: "comp" },
-      { from: "vfx", to: "houdini" },
-      { from: "vfx", to: "nuke" },
-      { from: "comp", to: "nuke" },
-      { from: "comp", to: "houdini" },
-      { from: "vfx", to: "genai" },
-      { from: "genai", to: "comfy" },
-      { from: "genai", to: "python" },
-      { from: "python", to: "linux" },
-      { from: "python", to: "nuke" },
-      { from: "vfx", to: "python" },
-      { from: "genai", to: "omni" },
-      { from: "python", to: "omni" },
-      { from: "comp", to: "genai" },
-      { from: "huggingface", to: "genai" },
-      { from: "huggingface", to: "comfy" },
-      { from: "openusd", to: "houdini" },
-      { from: "openusd", to: "omni" },
-      { from: "openusd", to: "vfx" },
-    ];
+    const connections = Array.from(lines).map((line) => ({
+      from: line.dataset.from || "",
+      to: line.dataset.to || "",
+    }));
 
     nodes.forEach((node) => {
       const id = node.dataset.id;
