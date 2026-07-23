@@ -9,13 +9,13 @@ interface Props {
   description?: string;
 }
 
-const { 
-  title = "Chalco Studio · VFX + AI", 
-  description = "Portafolio de Chalco Studio. Intersección de simulación de VFX y Physical AI." 
+const {
+  title = "Chalco Studio · VFX + AI",
+  description = "Portafolio de Chalco Studio. Intersección de simulación de VFX y Physical AI.",
 } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="utf-8" />
@@ -23,7 +23,7 @@ const {
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <title>{title}</title>
     <meta name="description" content={description} />
   </head>
@@ -34,14 +34,75 @@ const {
     <Footer />
 
     <script>
-      import { initMotion } from "../scripts/motion";
+      import { initMotion, getLenis } from "../scripts/motion";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+      function scrollToHash() {
+        const hash = window.location.hash;
+        if (!hash) return;
+        const target = document.querySelector(hash);
+        if (!target) return;
+
+        // Recalcular posiciones de ScrollTrigger antes de medir la posición del elemento
+        if (typeof ScrollTrigger !== "undefined") {
+          ScrollTrigger.refresh();
+        }
+
+        const nav = document.querySelector(".main-nav");
+        const navHeight = nav ? (nav as HTMLElement).offsetHeight : 80;
+
+        const lenis = getLenis();
+        if (lenis) {
+          lenis.scrollTo(target as HTMLElement, {
+            offset: -navHeight - 12,
+            duration: 1.2,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          });
+        } else {
+          const top =
+            target.getBoundingClientRect().top +
+            window.scrollY -
+            navHeight -
+            12;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }
+
+      function handleHashOnLoad() {
+        // Prevenir que el navegador intente restaurar el scroll nativo prematuramente si hay un hash
+        if (typeof window !== "undefined" && window.location.hash) {
+          if ("scrollRestoration" in history) {
+            history.scrollRestoration = "manual";
+          }
+        }
+
+        initMotion();
+
+        if (window.location.hash) {
+          const executeScroll = () => {
+            scrollToHash();
+            // Re-confirmación tras estabilización completa del layout
+            setTimeout(scrollToHash, 250);
+          };
+
+          if (document.readyState === "complete") {
+            setTimeout(executeScroll, 300);
+          } else {
+            window.addEventListener(
+              "load",
+              () => setTimeout(executeScroll, 300),
+              { once: true },
+            );
+          }
+        }
+      }
 
       // Initial run
-      initMotion();
+      handleHashOnLoad();
 
       // Support Astro page transitions (ClientRouter / ViewTransitions)
       document.addEventListener("astro:page-load", () => {
-        initMotion();
+        handleHashOnLoad();
       });
     </script>
   </body>
