@@ -11,8 +11,8 @@ interface Props {
 }
 
 const {
-  title = "Chalco Studio · VFX + AI",
-  description = "Portafolio de Chalco Studio. Intersección de simulación de VFX y Physical AI.",
+  title = "Chalco Labs · VFX, Motion & AI Workflows for Digital Craft",
+  description = "Explora Chalco Labs: la intersección entre VFX de alto nivel y el desarrollo de workflows impulsados por AI para experiencias digitales.",
   image = "/og.png",
 } = Astro.props;
 
@@ -41,6 +41,7 @@ const socialImageURL = new URL(image, Astro.site);
 
     <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Chalco Labs" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -53,6 +54,16 @@ const socialImageURL = new URL(image, Astro.site);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL} />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Chalco Labs",
+      "url": Astro.site?.toString() || "https://chalco-lab.netlify.app",
+      "logo": socialImageURL.toString(),
+      "description": description
+    })} />
   </head>
   <body>
     <Grain />
