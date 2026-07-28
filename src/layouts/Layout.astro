@@ -11,8 +11,8 @@ interface Props {
 }
 
 const {
-  title = "Chalco Labs · VFX, Motion & AI Workflows for Digital Craft",
-  description = "Explora Chalco Labs: la intersección entre VFX de alto nivel y el desarrollo de workflows impulsados por AI para experiencias digitales.",
+  title = "Chalco Labs · VFX, Motion & AI Workflows",
+  description = "Chalco Labs: VFX de alto nivel y desarrollo de workflows impulsados por AI para experiencias digitales.",
   image = "/og.png",
 } = Astro.props;
 
@@ -25,7 +25,10 @@ const socialImageURL = new URL(image, Astro.site);
   <head>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
@@ -56,14 +59,18 @@ const socialImageURL = new URL(image, Astro.site);
     <meta name="twitter:image" content={socialImageURL} />
 
     <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json" is:inline set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Chalco Labs",
-      "url": Astro.site?.toString() || "https://chalco-lab.netlify.app",
-      "logo": socialImageURL.toString(),
-      "description": description
-    })} />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Chalco Labs",
+        url: Astro.site?.toString() || "https://chalco-lab.netlify.app",
+        logo: socialImageURL.toString(),
+        description: description,
+      })}
+    />
   </head>
   <body>
     <Grain />
